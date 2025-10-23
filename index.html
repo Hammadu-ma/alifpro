@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>  | MediLearn Pro</title>
+    <title> | MediLearn Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
@@ -250,10 +250,6 @@
             opacity: 0.6;
             cursor: not-allowed;
         }
-        .quiz-card.locked:hover {
-            transform: none;
-            border-color: var(--border);
-        }
         .quiz-card.locked::after {
             content: '\f023';
             font-family: 'Font Awesome 6 Free';
@@ -318,7 +314,7 @@
             background: rgba(239, 68, 68, 0.1);
             color: var(--error);
         }
-        #registrationModal, #addModal, #confirmAddModal, #accessDeniedModal {
+        #registrationModal, #addModal, #confirmAddModal, #accessDeniedModal, #tempPasswordModal {
             position: fixed;
             top: 0;
             left: 0;
@@ -809,131 +805,54 @@
     margin-top: 0.5rem;
     text-align: center;
 }
-        /* Admin Styles */
-        #adminContent {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 80px 1rem 2rem;
-            background: linear-gradient(to bottom, var(--background), var(--surface));
-            min-height: calc(100vh - 80px);
-            overflow-y: auto;
-            -webkit-overflow-scrolling: touch;
-            display: none;
-        }
-        .admin-card {
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 2rem;
-            max-width: 1200px;
-            width: 100%;
-            box-shadow: var(--shadow);
-        }
-        .admin-filters {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            align-items: center;
-        }
-        .admin-search {
-            flex: 1;
-            padding: 0.75rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-        }
-        .admin-table-container {
-            overflow-x: auto;
-        }
-        .admin-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 1rem;
-        }
-        .admin-table th, .admin-table td {
-            padding: 1rem;
-            border: 1px solid var(--border);
-            text-align: left;
-            white-space: nowrap;
-        }
-        .admin-table th {
-            background: var(--primary-light);
-            color: var(--primary-dark);
-            cursor: pointer;
-            position: relative;
-        }
-        .admin-table th.sort-asc::after {
-            content: '\f0de';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            margin-left: 0.5rem;
-        }
-        .admin-table th.sort-desc::after {
-            content: '\f0dd';
-            font-family: 'Font Awesome 6 Free';
-            font-weight: 900;
-            margin-left: 0.5rem;
-        }
-        .admin-actions {
-            display: flex;
-            gap: 0.5rem;
-        }
-        .edit-btn, .delete-btn {
-            padding: 0.5rem 1rem;
-            border-radius: var(--radius);
-            cursor: pointer;
-            transition: var(--transition);
-        }
-        .edit-btn {
-            background: var(--info);
-            color: white;
-        }
-        .delete-btn {
-            background: var(--error);
-            color: white;
-        }
-        .bulk-actions {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-        .pagination {
-            display: flex;
-            gap: 0.5rem;
-            justify-content: center;
-            margin-top: 1rem;
-        }
-        .page-btn {
-            padding: 0.5rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            background: var(--surface);
-            cursor: pointer;
-        }
-        .page-btn.active {
-            background: var(--primary);
-            color: white;
-        }
-        .loading-spinner {
-            display: none;
-            text-align: center;
-            padding: 2rem;
-        }
-        #addUserModal, #editUserModal {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            z-index: 1001;
-        }
-        #selectAll {
-            margin-right: 0.5rem;
-        }
+
+/* New Temporary Password Login Styles */
+.temp-login-section {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: rgba(139, 92, 246, 0.05);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+.temp-login-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.temp-login-title i {
+    color: var(--purple);
+}
+
+.temp-login-btn {
+    background: var(--gradient-premium);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    transition: var(--transition);
+    font-weight: 600;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.temp-login-btn:hover {
+    background: var(--purple);
+}
+
+:root {
+    --purple: #8b5cf6;
+    --gradient-premium: linear-gradient(135deg, #8b5cf6 0%, #ec4899 100%);
+}
     </style>
 </head>
 <body class="dark-mode">
@@ -977,6 +896,17 @@
             </div>
             <p class="payment-note">Please use your name as payment reference</p>
         </div>
+
+        <!-- New Temporary Password Login Section -->
+        <div class="temp-login-section">
+            <h3 class="temp-login-title"><i class="fas fa-key"></i> Admin Password Login</h3>
+            <p style="font-size: 0.9rem; color: var(--text-secondary); margin-bottom: 1rem;">
+                Already registered? Login with temporary password from admin
+            </p>
+            <button class="temp-login-btn" id="tempPasswordLoginBtn">
+                <i class="fas fa-sign-in-alt"></i> Login with Admin Password
+            </button>
+        </div>
         
         <form id="regForm">
             <div class="input-group">
@@ -1006,7 +936,7 @@
             </div>
             <div class="input-group">
                 <i class="fab fa-telegram-plane"></i>
-                <input id="telegram" placeholder="Telegram Username (optional)">
+                <input id="telegram" placeholder="Telegram Username (required for fast auth.)">
             </div>
             <div class="file-upload">
                 <i class="fas fa-cloud-upload-alt"></i>
@@ -1038,6 +968,35 @@
             <button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back to Registration</button>
             <div id="verifyError" class="error"></div>
         </div>
+    </div>
+</div>
+
+<!-- Temporary Password Login Modal -->
+<div id="tempPasswordModal" style="display: none;">
+    <div class="modal-content">
+        <h2><i class="fas fa-key"></i> Admin Password Login</h2>
+        <p style="margin-bottom: 1.5rem; color: var(--text-secondary);">
+            Enter your phone number and temporary password provided by admin
+        </p>
+        
+        <form id="tempPasswordForm">
+            <div class="input-group">
+                <i class="fas fa-phone"></i>
+                <input id="tempPhone" type="tel" placeholder="Your registered phone number" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-lock"></i>
+                <input id="tempPassword" type="text" placeholder="Temporary password from admin" required>
+            </div>
+            <button type="submit" id="tempLoginBtn">
+                <i class="fas fa-sign-in-alt"></i> Login
+            </button>
+            <div id="tempLoginError" class="error"></div>
+        </form>
+        
+        <button class="back-btn" id="backToRegBtn">
+            <i class="fas fa-arrow-left"></i> Back to Registration
+        </button>
     </div>
 </div>
 
@@ -1122,6 +1081,7 @@
         </div>
     </div>
 </div>
+
     <!-- Confirm Add Modal -->
     <div id="confirmAddModal" style="display: none;">
         <div class="modal-content">
@@ -1153,81 +1113,7 @@
             <div id="logoutError" class="error"></div>
         </div>
     </div>
-    <!-- Add User Modal -->
-    <div id="addUserModal" style="display: none;">
-        <div class="modal-content">
-            <h2><i class="fas fa-user-plus"></i> Add New User</h2>
-            <form id="addUserForm">
-                <div class="input-group">
-                    <i class="fas fa-user"></i>
-                    <input id="addUserName" placeholder="Full Name" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-phone"></i>
-                    <input id="addUserPhone" type="tel" placeholder="Phone Number" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input id="addUserEmail" type="email" placeholder="Email (optional)">
-                </div>
-                <div class="input-group">
-                    <i class="fab fa-telegram-plane"></i>
-                    <input id="addUserTelegram" placeholder="Telegram Username (optional)">
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-graduation-cap"></i>
-                    <select id="addUserYear" required>
-                        <option value="" disabled selected>Select Year</option>
-                        <option value="1">Pre Med - 100 ETB</option>
-                        <option value="2">Intro Med - 100 ETB</option>
-                        <option value="3">Meta - 100 ETB</option>
-                        <option value="4">Hema - 100 ETB</option>
-                        <option value="5">CVS - 100 ETB</option>
-                        <option value="6">RESPA - 100 ETB</option>
-                        <option value="7">Musclo - 100 ETB</option>
-                    </select>
-                </div>
-                <button type="submit"><i class="fas fa-save"></i> Add User</button>
-            </form>
-        </div>
-    </div>
-    <!-- Edit User Modal -->
-    <div id="editUserModal" style="display: none;">
-        <div class="modal-content">
-            <h2><i class="fas fa-edit"></i> Edit User</h2>
-            <form id="editUserForm">
-                <input type="hidden" id="editUserId">
-                <div class="input-group">
-                    <i class="fas fa-user"></i>
-                    <input id="editUserName" placeholder="Full Name" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-phone"></i>
-                    <input id="editUserPhone" type="tel" placeholder="Phone Number" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-envelope"></i>
-                    <input id="editUserEmail" type="email" placeholder="Email">
-                </div>
-                <div class="input-group">
-                    <i class="fab fa-telegram-plane"></i>
-                    <input id="editUserTelegram" placeholder="Telegram Username">
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-graduation-cap"></i>
-                    <input id="editUserYears" placeholder="Years (comma separated)" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-check-circle"></i>
-                    <select id="editUserStatus" required>
-                        <option value="verified">Verified</option>
-                        <option value="pending">Pending</option>
-                    </select>
-                </div>
-                <button type="submit"><i class="fas fa-save"></i> Save Changes</button>
-            </form>
-        </div>
-    </div>
+
     <!-- Header -->
     <header class="header" id="header">
         <div class="header-container">
@@ -1348,50 +1234,7 @@
             <button id="backToMainBtn"><i class="fas fa-arrow-left"></i> Back to Quizzes</button>
         </div>
     </main>
-    <!-- Admin Content -->
-    <main id="adminContent" class="main-content">
-        <div class="admin-card">
-            <h2 class="page-title">Admin User Management</h2>
-            <div class="bulk-actions">
-                <button id="addNewUserBtn" class="action-btn primary"><i class="fas fa-user-plus"></i> Add New User</button>
-                <button id="deleteSelectedBtn" class="action-btn" style="background: var(--error); color: white;"><i class="fas fa-trash"></i> Delete Selected</button>
-                <button id="deleteAllBtn" class="action-btn" style="background: var(--error); color: white;"><i class="fas fa-trash-alt"></i> Delete All</button>
-            </div>
-            <div class="admin-filters">
-                <input id="adminSearch" class="admin-search" placeholder="Search by name or phone...">
-                <select id="perPageSelect">
-                    <option value="10">10 per page</option>
-                    <option value="20" selected>20 per page</option>
-                    <option value="50">50 per page</option>
-                </select>
-            </div>
-            <div class="admin-table-container">
-                <table class="admin-table">
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox" id="selectAll"></th>
-                            <th data-sort="id">ID</th>
-                            <th data-sort="name">Name</th>
-                            <th data-sort="phone">Phone</th>
-                            <th data-sort="email">Email</th>
-                            <th data-sort="telegram">Telegram</th>
-                            <th data-sort="registeredYears">Years</th>
-                            <th data-sort="status">Status</th>
-                            <th data-sort="createdAt">Created</th>
-                            <th data-sort="lastLogin">Last Login</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody id="usersTableBody"></tbody>
-                </table>
-            </div>
-            <div class="pagination" id="pagination"></div>
-            <div id="adminLoading" class="loading-spinner">
-                <i class="fas fa-spinner fa-spin"></i> Loading...
-            </div>
-            <button id="backToProfileBtn" class="action-btn"><i class="fas fa-arrow-left"></i> Back to Profile</button>
-        </div>
-    </main>
+
     <script>
 // Detect offline status and redirect to offline page
 window.addEventListener('offline', () => {
@@ -1448,7 +1291,7 @@ window.addEventListener('load', () => {
   }
 
   // --- 4️⃣ Optional: Prevent unwanted exits ---
-  // This ensures pressing back doesn’t immediately close the app
+  // This ensures pressing back doesn't immediately close the app
   history.pushState(null, '', location.href);
 </script>
     <script>
@@ -1485,7 +1328,7 @@ window.addEventListener('load', () => {
         }, { passive: false });
         document.addEventListener('gesturestart', e => e.preventDefault());
 
-        // Firebase User Manager (extended for admin)
+        // Firebase User Manager (extended for temporary password login)
         class FirebaseUserManager {
             constructor() {
                 this.usersCollection = db.collection('users');
@@ -1502,6 +1345,54 @@ window.addEventListener('load', () => {
                 return now - timestamp > twoDaysInMs;
             }
 
+            // NEW: Temporary password login method
+            async loginWithTemporaryPassword(phone, password) {
+                try {
+                    const snapshot = await this.usersCollection.where('phone', '==', phone).get();
+                    if (snapshot.empty) {
+                        return { success: false, error: 'Phone number not found. Please register first.' };
+                    }
+
+                    const doc = snapshot.docs[0];
+                    const user = doc.data();
+                    
+                    // Check if user has a temporary password
+                    if (!user.verificationCode) {
+                        return { success: false, error: 'No temporary password set. Please use regular login.' };
+                    }
+
+                    // Check if password matches
+                    if (user.verificationCode !== password) {
+                        return { success: false, error: 'Invalid temporary password.' };
+                    }
+
+                    // Check if password is expired
+                    if (user.passwordExpiration && user.passwordExpiration < Date.now()) {
+                        return { success: false, error: 'Temporary password has expired. Please contact admin.' };
+                    }
+
+                    // Check code timestamp (additional security)
+                    if (user.codeTimestamp && this.isCodeExpired(user.codeTimestamp)) {
+                        return { success: false, error: 'Temporary password has expired. Please contact admin.' };
+                    }
+
+                    // Update user status and last login
+                    await this.usersCollection.doc(doc.id).update({
+                        status: 'verified',
+                        lastLogin: new Date().getTime()
+                    });
+
+                    user.id = doc.id;
+                    user.status = 'verified';
+                    user.lastLogin = new Date().getTime();
+
+                    return { success: true, user };
+                } catch (error) {
+                    console.error('Error logging in with temporary password:', error);
+                    return { success: false, error: 'Login failed. Please try again.' };
+                }
+            }
+
             async createUser(userData) {
                 try {
                     if (await this.checkPhoneExists(userData.phone)) {
@@ -1516,7 +1407,7 @@ window.addEventListener('load', () => {
                         createdAt: new Date().getTime(),
                         lastLogin: null,
                         status: 'pending',
-                        role: 'user' // Default role
+                        role: 'user'
                     };
 
                     const docRef = await this.usersCollection.add(userRecord);
@@ -1673,84 +1564,6 @@ window.addEventListener('load', () => {
                     return null;
                 }
             }
-
-            // Admin methods
-            async getAllUsers() {
-                try {
-                    const snapshot = await this.usersCollection.get();
-                    return snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                } catch (error) {
-                    console.error('Error getting all users:', error);
-                    return [];
-                }
-            }
-
-            async addNewUser(userData) {
-                try {
-                    const docRef = await this.usersCollection.add({
-                        ...userData,
-                        registeredYears: [userData.year],
-                        createdAt: new Date().getTime(),
-                        lastLogin: null,
-                        status: 'verified',
-                        role: 'user'
-                    });
-                    return { success: true, userId: docRef.id };
-                } catch (error) {
-                    console.error('Error adding new user:', error);
-                    return { success: false, error: error.message };
-                }
-            }
-
-            async updateUser(userId, updates) {
-                try {
-                    await this.usersCollection.doc(userId).update(updates);
-                    return { success: true };
-                } catch (error) {
-                    console.error('Error updating user:', error);
-                    return { success: false, error: error.message };
-                }
-            }
-
-            async deleteUser(userId) {
-                try {
-                    await this.usersCollection.doc(userId).delete();
-                    return { success: true };
-                } catch (error) {
-                    console.error('Error deleting user:', error);
-                    return { success: false, error: error.message };
-                }
-            }
-
-            async deleteUsers(userIds) {
-                try {
-                    const batch = db.batch();
-                    userIds.forEach(id => {
-                        const docRef = this.usersCollection.doc(id);
-                        batch.delete(docRef);
-                    });
-                    await batch.commit();
-                    return { success: true };
-                } catch (error) {
-                    console.error('Error deleting users:', error);
-                    return { success: false, error: error.message };
-                }
-            }
-
-            async deleteAllUsers() {
-                try {
-                    const snapshot = await this.usersCollection.get();
-                    const batch = db.batch();
-                    snapshot.docs.forEach(doc => {
-                        batch.delete(doc.ref);
-                    });
-                    await batch.commit();
-                    return { success: true };
-                } catch (error) {
-                    console.error('Error deleting all users:', error);
-                    return { success: false, error: error.message };
-                }
-            }
         }
 
         const firebaseUserManager = new FirebaseUserManager();
@@ -1770,7 +1583,7 @@ window.addEventListener('load', () => {
         }
         themeToggle.addEventListener('click', toggleTheme);
 
-        // Quiz data
+        // Quiz data (unchanged)
         const quizData = {
             1: [
                 { id: 6, title: "Organic Chemistry", icon: "fas fa-brain", questions: 30, time: 25, difficulty: "intermediate", rating: 4.6, page: "year2/human-anatomy.html" },
@@ -1904,55 +1717,39 @@ window.addEventListener('load', () => {
         // Navigation
         const mainContent = document.getElementById('mainContent');
         const profileContent = document.getElementById('profileContent');
-        const adminContent = document.getElementById('adminContent');
         const profileBtn = document.getElementById('profileBtn');
         const adminBtn = document.getElementById('adminBtn');
         const logoBtn = document.getElementById('logoBtn');
         const backToMainBtn = document.getElementById('backToMainBtn');
-        const backToProfileBtn = document.getElementById('backToProfileBtn');
 
         logoBtn.addEventListener('click', (e) => {
             e.preventDefault();
             mainContent.style.display = 'block';
             profileContent.style.display = 'none';
-            adminContent.style.display = 'none';
         });
 
         profileBtn.addEventListener('click', () => {
             mainContent.style.display = 'none';
             profileContent.style.display = 'block';
-            adminContent.style.display = 'none';
             loadProfile();
-        });
-
-        adminBtn.addEventListener('click', () => {
-            mainContent.style.display = 'none';
-            profileContent.style.display = 'none';
-            adminContent.style.display = 'block';
-            loadAdminUsers();
         });
 
         backToMainBtn.addEventListener('click', () => {
             mainContent.style.display = 'block';
             profileContent.style.display = 'none';
-            adminContent.style.display = 'none';
-        });
-
-        backToProfileBtn.addEventListener('click', () => {
-            mainContent.style.display = 'none';
-            profileContent.style.display = 'block';
-            adminContent.style.display = 'none';
-            loadProfile();
         });
 
         // Registration logic
         const regModal = document.getElementById('registrationModal');
+        const tempPasswordModal = document.getElementById('tempPasswordModal');
         const regForm = document.getElementById('regForm');
+        const tempPasswordForm = document.getElementById('tempPasswordForm');
         const loginForm = document.getElementById('loginForm');
         const verifyForm = document.getElementById('verifyForm');
         const logout = document.getElementById('logout');
         const logoutModal = document.getElementById('logoutModal');
         const regError = document.getElementById('regError');
+        const tempLoginError = document.getElementById('tempLoginError');
         const loginError = document.getElementById('loginError');
         const verifyError = document.getElementById('verifyError');
         const logoutError = document.getElementById('logoutError');
@@ -1962,10 +1759,70 @@ window.addEventListener('load', () => {
         const yearSelect = document.getElementById('year');
         const priceInfo = document.getElementById('priceInfo');
         const submitBtn = document.getElementById('submitBtn');
+        const tempLoginBtn = document.getElementById('tempLoginBtn');
         const loginSubmitBtn = document.getElementById('loginSubmitBtn');
         const backBtn = document.getElementById('backBtn');
+        const backToRegBtn = document.getElementById('backToRegBtn');
         const loginLink = document.getElementById('loginLink');
         const registerLink = document.getElementById('registerLink');
+        const tempPasswordLoginBtn = document.getElementById('tempPasswordLoginBtn');
+
+        // NEW: Temporary password login button
+        tempPasswordLoginBtn.addEventListener('click', () => {
+            regModal.style.display = 'none';
+            tempPasswordModal.style.display = 'flex';
+        });
+
+        // NEW: Back to registration from temp password modal
+        backToRegBtn.addEventListener('click', () => {
+            tempPasswordModal.style.display = 'none';
+            regModal.style.display = 'flex';
+        });
+
+        // NEW: Temporary password form submission
+        tempPasswordForm.addEventListener('submit', async e => {
+            e.preventDefault();
+            tempLoginBtn.classList.add('loading');
+            tempLoginBtn.disabled = true;
+            
+            const phone = document.getElementById('tempPhone').value;
+            const password = document.getElementById('tempPassword').value;
+
+            if (!phone || !password) {
+                tempLoginError.textContent = 'Please enter both phone number and password.';
+                tempLoginBtn.classList.remove('loading');
+                tempLoginBtn.disabled = false;
+                return;
+            }
+
+            const result = await firebaseUserManager.loginWithTemporaryPassword(phone, password);
+            
+            if (result.success) {
+                // Store user data in localStorage
+                localStorage.setItem('currentUser', JSON.stringify(result.user));
+                localStorage.setItem('userYears', JSON.stringify(result.user.registeredYears));
+                localStorage.setItem('verified', 'true');
+                
+                // Check role for admin
+                if (result.user.role === 'admin') {
+                    adminBtn.style.display = 'inline-flex';
+                }
+                
+                // Close modal and show main content
+                tempPasswordModal.style.display = 'none';
+                mainContent.style.display = 'block';
+                renderQuizCards();
+                
+                // Show success message
+                tempLoginError.textContent = '';
+                alert('Login successful! Welcome back ' + result.user.name);
+            } else {
+                tempLoginError.textContent = result.error;
+            }
+
+            tempLoginBtn.classList.remove('loading');
+            tempLoginBtn.disabled = false;
+        });
 
         // Toggle between register and login
         loginLink.addEventListener('click', () => {
@@ -2006,28 +1863,30 @@ window.addEventListener('load', () => {
                 uploadText.textContent = 'Upload Payment Receipt';
             }
         });
-function copyToClipboard(text, button) {
-    navigator.clipboard.writeText(text).then(() => {
-        const originalText = button.innerHTML;
-        button.innerHTML = '<i class="fas fa-check"></i> Copied!';
-        button.classList.add('copied');
-        
-        setTimeout(() => {
-            button.innerHTML = originalText;
-            button.classList.remove('copied');
-        }, 2000);
-        
-    }).catch(err => {
-        console.error('Failed to copy: ', err);
-        button.innerHTML = '<i class="fas fa-times"></i> Failed';
-        button.style.background = 'var(--error)';
-        
-        setTimeout(() => {
-            button.innerHTML = '<i class="fas fa-copy"></i> Copy';
-            button.style.background = 'var(--primary)';
-        }, 2000);
-    });
-}
+
+        function copyToClipboard(text, button) {
+            navigator.clipboard.writeText(text).then(() => {
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+                button.classList.add('copied');
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+                
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+                button.innerHTML = '<i class="fas fa-times"></i> Failed';
+                button.style.background = 'var(--error)';
+                
+                setTimeout(() => {
+                    button.innerHTML = '<i class="fas fa-copy"></i> Copy';
+                    button.style.background = 'var(--primary)';
+                }, 2000);
+            });
+        }
+
         // Check verification code expiry
         function isVerificationExpired(timestampKey) {
             const codeTimestamp = localStorage.getItem(timestampKey);
@@ -2038,79 +1897,78 @@ function copyToClipboard(text, button) {
         }
 
         // Initialize modal state
-async function init() {
-    console.log('Checking user authentication...');
-    
-    const currentUser = localStorage.getItem('currentUser');
-    
-    if (currentUser) {
-        try {
-            const user = JSON.parse(currentUser);
-            console.log('Found cached user:', user.name);
+        async function init() {
+            console.log('Checking user authentication...');
             
-            // Show main content immediately
-            regModal.style.display = 'none';
-            mainContent.style.display = 'block';
-            renderQuizCards();
-
-            // Add timeout for Firebase check
-            const firebaseCheck = firebaseUserManager.getUserByPhone(user.phone);
-            const timeoutPromise = new Promise((_, reject) => 
-                setTimeout(() => reject(new Error('Timeout')), 5000)
-            );
-
-            const latestUser = await Promise.race([firebaseCheck, timeoutPromise]);
+            const currentUser = localStorage.getItem('currentUser');
             
-            if (latestUser && latestUser.status === 'verified') {
-                console.log('User is verified in Firebase');
-                localStorage.setItem('currentUser', JSON.stringify(latestUser));
-                localStorage.setItem('userYears', JSON.stringify(latestUser.registeredYears));
-                
-                if (latestUser.role === 'admin') {
-                    adminBtn.style.display = 'inline-flex';
+            if (currentUser) {
+                try {
+                    const user = JSON.parse(currentUser);
+                    console.log('Found cached user:', user.name);
+                    
+                    // Show main content immediately
+                    regModal.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    renderQuizCards();
+
+                    // Add timeout for Firebase check
+                    const firebaseCheck = firebaseUserManager.getUserByPhone(user.phone);
+                    const timeoutPromise = new Promise((_, reject) => 
+                        setTimeout(() => reject(new Error('Timeout')), 5000)
+                    );
+
+                    const latestUser = await Promise.race([firebaseCheck, timeoutPromise]);
+                    
+                    if (latestUser && latestUser.status === 'verified') {
+                        console.log('User is verified in Firebase');
+                        localStorage.setItem('currentUser', JSON.stringify(latestUser));
+                        localStorage.setItem('userYears', JSON.stringify(latestUser.registeredYears));
+                        
+                        if (latestUser.role === 'admin') {
+                            adminBtn.style.display = 'inline-flex';
+                        }
+                        renderQuizCards();
+                    } else {
+                        console.log('User verification failed');
+                        // Only logout if definitely not verified, not on timeout
+                        if (latestUser) { // if not timeout
+                            localStorage.clear();
+                            showRegistrationModal();
+                        }
+                    }
+                } catch (error) {
+                    console.error('Error checking user status:', error);
+                    // On error, keep user logged in with cached data
+                    console.log('Using cached user data due to error');
                 }
-                renderQuizCards();
             } else {
-                console.log('User verification failed');
-                // Only logout if definitely not verified, not on timeout
-                if (latestUser) { // if not timeout
-                    localStorage.clear();
-                    showRegistrationModal();
+                console.log('No cached user found');
+                showRegistrationModal();
+            }
+        }
+
+        // Also add this to force status check on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check status every minute
+            setInterval(async () => {
+                const currentUser = localStorage.getItem('currentUser');
+                if (currentUser) {
+                    const user = JSON.parse(currentUser);
+                    const latestUser = await firebaseUserManager.getUserByPhone(user.phone);
+                    if (!latestUser || latestUser.status !== 'verified') {
+                        localStorage.clear();
+                        location.reload();
+                    }
                 }
-            }
-        } catch (error) {
-            console.error('Error checking user status:', error);
-            // On error, keep user logged in with cached data
-            console.log('Using cached user data due to error');
-        }
-    } else {
-        console.log('No cached user found');
-        showRegistrationModal();
-    }
-}
+            }, 60000);
+        });
 
-// Also add this to force status check on page load
-document.addEventListener('DOMContentLoaded', function() {
-    // Check status every minute
-    setInterval(async () => {
-        const currentUser = localStorage.getItem('currentUser');
-        if (currentUser) {
-            const user = JSON.parse(currentUser);
-            const latestUser = await firebaseUserManager.getUserByPhone(user.phone);
-            if (!latestUser || latestUser.status !== 'verified') {
-                localStorage.clear();
-                location.reload();
-            }
+        function showRegistrationModal() {
+            regModal.style.display = 'flex';
+            mainContent.style.display = 'none';
+            profileContent.style.display = 'none';
         }
-    }, 60000);
-});
-
-function showRegistrationModal() {
-    regModal.style.display = 'flex';
-    mainContent.style.display = 'none';
-    profileContent.style.display = 'none';
-    adminContent.style.display = 'none';
-}
 
         // Back button to return to registration form
         backBtn.addEventListener('click', () => {
@@ -2286,6 +2144,7 @@ function showRegistrationModal() {
             }
         });
 
+        // [The rest of your existing code for Add Year, Profile, Logout, etc. remains exactly the same...]
         // Add Year Logic
         const addModal = document.getElementById('addModal');
         const confirmAddModal = document.getElementById('confirmAddModal');
@@ -2582,221 +2441,6 @@ function showRegistrationModal() {
                 location.reload();
             } else {
                 logoutError.textContent = 'Invalid logout code.';
-            }
-        });
-
-        // Admin Logic
-        let allUsers = [];
-        let currentSortField = 'createdAt';
-        let currentSortDirection = 'desc';
-        let currentPage = 1;
-        let perPage = 20;
-        let searchTerm = '';
-
-        async function loadAdminUsers() {
-            document.getElementById('adminLoading').style.display = 'block';
-            allUsers = await firebaseUserManager.getAllUsers();
-            document.getElementById('adminLoading').style.display = 'none';
-            updateAdminTable();
-        }
-
-        function updateAdminTable() {
-            let filteredUsers = allUsers.filter(user => {
-                const term = searchTerm.toLowerCase();
-                return user.name?.toLowerCase().includes(term) || user.phone?.toLowerCase().includes(term) || user.email?.toLowerCase().includes(term);
-            });
-
-            filteredUsers.sort((a, b) => {
-                let valA = a[currentSortField];
-                let valB = b[currentSortField];
-                if (valA == null) valA = 0;
-                if (valB == null) valB = 0;
-                if (typeof valA === 'string') valA = valA.toLowerCase();
-                if (typeof valB === 'string') valB = valB.toLowerCase();
-                if (currentSortDirection === 'asc') {
-                    return valA > valB ? 1 : valA < valB ? -1 : 0;
-                } else {
-                    return valA < valB ? 1 : valA > valB ? -1 : 0;
-                }
-            });
-
-            const start = (currentPage - 1) * perPage;
-            const end = start + perPage;
-            const paginatedUsers = filteredUsers.slice(start, end);
-
-            const tableBody = document.getElementById('usersTableBody');
-            tableBody.innerHTML = '';
-            paginatedUsers.forEach(user => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td><input type="checkbox" class="userSelect" data-id="${user.id}"></td>
-                    <td>${user.id}</td>
-                    <td>${user.name || 'N/A'}</td>
-                    <td>${user.phone || 'N/A'}</td>
-                    <td>${user.email || 'N/A'}</td>
-                    <td>${user.telegram || 'N/A'}</td>
-                    <td>${user.registeredYears ? user.registeredYears.join(', ') : 'N/A'}</td>
-                    <td>${user.status || 'N/A'}</td>
-                    <td>${user.createdAt ? new Date(user.createdAt).toLocaleString() : 'N/A'}</td>
-                    <td>${user.lastLogin ? new Date(user.lastLogin).toLocaleString() : 'N/A'}</td>
-                    <td class="admin-actions">
-                        <button class="edit-btn" data-id="${user.id}">Edit</button>
-                        <button class="delete-btn" data-id="${user.id}">Delete</button>
-                    </td>
-                `;
-                tableBody.appendChild(row);
-            });
-
-            // Update pagination
-            const totalPages = Math.ceil(filteredUsers.length / perPage);
-            const pagination = document.getElementById('pagination');
-            pagination.innerHTML = '';
-            for (let i = 1; i <= totalPages; i++) {
-                const btn = document.createElement('button');
-                btn.className = 'page-btn';
-                btn.textContent = i;
-                if (i === currentPage) btn.classList.add('active');
-                btn.addEventListener('click', () => {
-                    currentPage = i;
-                    updateAdminTable();
-                });
-                pagination.appendChild(btn);
-            }
-
-            // Add event listeners
-            document.querySelectorAll('.edit-btn').forEach(btn => {
-                btn.addEventListener('click', handleEditUser);
-            });
-            document.querySelectorAll('.delete-btn').forEach(btn => {
-                btn.addEventListener('click', handleDeleteUser);
-            });
-        }
-
-        document.getElementById('adminSearch').addEventListener('input', e => {
-            searchTerm = e.target.value;
-            currentPage = 1;
-            updateAdminTable();
-        });
-
-        document.getElementById('perPageSelect').addEventListener('change', e => {
-            perPage = parseInt(e.target.value);
-            currentPage = 1;
-            updateAdminTable();
-        });
-
-        document.querySelectorAll('.admin-table th[data-sort]').forEach(th => {
-            th.addEventListener('click', () => {
-                const field = th.dataset.sort;
-                if (currentSortField === field) {
-                    currentSortDirection = currentSortDirection === 'asc' ? 'desc' : 'asc';
-                } else {
-                    currentSortField = field;
-                    currentSortDirection = 'asc';
-                }
-                document.querySelectorAll('.admin-table th').forEach(h => {
-                    h.classList.remove('sort-asc', 'sort-desc');
-                });
-                th.classList.add(`sort-${currentSortDirection}`);
-                updateAdminTable();
-            });
-        });
-
-        document.getElementById('selectAll').addEventListener('change', e => {
-            document.querySelectorAll('.userSelect').forEach(checkbox => {
-                checkbox.checked = e.target.checked;
-            });
-        });
-
-        document.getElementById('addNewUserBtn').addEventListener('click', () => {
-            document.getElementById('addUserModal').style.display = 'flex';
-        });
-
-        document.getElementById('addUserForm').addEventListener('submit', async e => {
-            e.preventDefault();
-            const userData = {
-                name: document.getElementById('addUserName').value,
-                phone: document.getElementById('addUserPhone').value,
-                email: document.getElementById('addUserEmail').value || '',
-                telegram: document.getElementById('addUserTelegram').value || 'N/A',
-                year: document.getElementById('addUserYear').value
-            };
-            const result = await firebaseUserManager.addNewUser(userData);
-            if (result.success) {
-                document.getElementById('addUserModal').style.display = 'none';
-                loadAdminUsers();
-            } else {
-                alert('Error adding user: ' + result.error);
-            }
-        });
-
-        async function handleEditUser(e) {
-            const userId = e.target.dataset.id;
-            const selectedUser = allUsers.find(u => u.id === userId);
-            if (selectedUser) {
-                document.getElementById('editUserId').value = selectedUser.id;
-                document.getElementById('editUserName').value = selectedUser.name;
-                document.getElementById('editUserPhone').value = selectedUser.phone;
-                document.getElementById('editUserEmail').value = selectedUser.email || '';
-                document.getElementById('editUserTelegram').value = selectedUser.telegram;
-                document.getElementById('editUserYears').value = selectedUser.registeredYears.join(', ');
-                document.getElementById('editUserStatus').value = selectedUser.status;
-                document.getElementById('editUserModal').style.display = 'flex';
-            }
-        }
-
-        document.getElementById('editUserForm').addEventListener('submit', async e => {
-            e.preventDefault();
-            const userId = document.getElementById('editUserId').value;
-            const updates = {
-                name: document.getElementById('editUserName').value,
-                phone: document.getElementById('editUserPhone').value,
-                email: document.getElementById('editUserEmail').value,
-                telegram: document.getElementById('editUserTelegram').value,
-                registeredYears: document.getElementById('editUserYears').value.split(',').map(y => y.trim()),
-                status: document.getElementById('editUserStatus').value
-            };
-            const result = await firebaseUserManager.updateUser(userId, updates);
-            if (result.success) {
-                document.getElementById('editUserModal').style.display = 'none';
-                loadAdminUsers();
-            } else {
-                alert('Error updating user: ' + result.error);
-            }
-        });
-
-        async function handleDeleteUser(e) {
-            const userId = e.target.dataset.id;
-            if (confirm('Are you sure you want to delete this user?')) {
-                const result = await firebaseUserManager.deleteUser(userId);
-                if (result.success) {
-                    loadAdminUsers();
-                } else {
-                    alert('Error deleting user: ' + result.error);
-                }
-            }
-        }
-
-        document.getElementById('deleteSelectedBtn').addEventListener('click', async () => {
-            const selected = Array.from(document.querySelectorAll('.userSelect:checked')).map(checkbox => checkbox.dataset.id);
-            if (selected.length === 0) return alert('No users selected');
-            if (confirm(`Delete ${selected.length} users?`)) {
-                const result = await firebaseUserManager.deleteUsers(selected);
-                if (result.success) {
-                    loadAdminUsers();
-                } else {
-                    alert('Error deleting users: ' + result.error);
-                }
-            }
-        });
-
-        document.getElementById('deleteAllBtn').addEventListener('click', async () => {
-            if (confirm('Delete ALL users? This cannot be undone!')) {
-                const result = await firebaseUserManager.deleteAllUsers();
-                if (result.success) {
-                    loadAdminUsers();
-                } else {
-                    alert('Error deleting all users: ' + result.error);
-                }
             }
         });
 
