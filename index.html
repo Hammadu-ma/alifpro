@@ -5,9 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>ALIFO</title>
+    <title>  | MediLearn Pro</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-auth-compat.js"></script>
     <style>
         :root {
             --primary: #60a5fa;
@@ -85,26 +88,26 @@
             margin: 0 auto;
         }
         .logo {
-           display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: var(--primary);
-  text-decoration: none;
-  cursor: pointer;
-}
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.25rem;
+            font-weight: 800;
+            color: var(--primary);
+            text-decoration: none;
+            cursor: pointer;
+        }
 
-.logo img {
-  width: 40px;       /* Adjust size */
-  height: 40px;      /* Keep consistent shape */
-  border-radius: 50%; /* Optional: make it circular */
-  object-fit: cover;  /* Ensures the image doesn’t stretch */
-}
+        .logo img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
 
-.logo i {
-  font-size: 1.5rem;
-}
+        .logo i {
+            font-size: 1.5rem;
+        }
 
         .nav-actions {
             display: flex;
@@ -337,8 +340,10 @@
             position: relative;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             animation: slideIn 0.3s ease-out;
-            max-height: 90vh;
             overflow-y: auto;
+            max-height: 80vh;
+            -webkit-overflow-scrolling: touch;
+            scroll-behavior: smooth;
         }
         @keyframes slideIn {
             from { transform: translateY(-50px); opacity: 0; }
@@ -720,199 +725,270 @@
                 height: 100px;
             }
         }
-        .account-info {
-            margin-bottom: 1.5rem;
-            padding: 1rem;
-            background: var(--surface);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            text-align: left;
-        }
-        .account-info h3 {
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-            color: var(--text-primary);
-        }
-        .account-item {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            position: relative;
-        }
-        .account-item span {
-            color: var(--text-secondary);
-        }
-        .copy-btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: var(--transition);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-        .copy-btn:hover {
-            background: var(--primary-dark);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-        .copied-alert {
-            position: absolute;
-            top: -40px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: var(--success);
-            color: white;
-            padding: 0.5rem 1rem;
-            border-radius: 6px;
-            opacity: 0;
-            transition: opacity 0.3s ease-in-out, top 0.3s ease-in-out;
-            white-space: nowrap;
-            font-size: 0.85rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-        }
-        .copied-alert.show {
-            opacity: 1;
-            top: -45px;
-        }
+    .account-section {
+    margin: 1.5rem 0;
+    padding: 1rem;
+    background: rgba(59, 130, 246, 0.05);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+.account-title {
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.account-title i {
+    color: var(--primary);
+}
+
+.account-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.account-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem;
+    background: var(--surface);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+}
+
+.account-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.account-name {
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 0.9rem;
+}
+
+.account-number {
+    font-family: monospace;
+    color: var(--text-secondary);
+    font-size: 0.85rem;
+}
+
+.copy-btn {
+    background: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    padding: 0.5rem 0.75rem;
+    cursor: pointer;
+    transition: var(--transition);
+    font-size: 0.8rem;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+}
+
+.copy-btn:hover {
+    background: var(--primary-dark);
+}
+
+.copy-btn.copied {
+    background: var(--success);
+}
+
+.payment-note {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin-top: 0.5rem;
+    text-align: center;
+}
     </style>
 </head>
 <body class="dark-mode">
     <!-- Registration Modal -->
-    <div id="registrationModal">
-        <div class="modal-content">
-            <h2><i class="fas fa-user-plus"></i> Register</h2>
-            <div id="priceInfo" class="price-info">Select Year to View Price</div>
-            <div class="account-info">
-                <h3>Payment Accounts</h3>
+<div id="registrationModal">
+    <div class="modal-content">
+        <h2><i class="fas fa-user-plus"></i> Register</h2>
+        <div id="priceInfo" class="price-info">Select Year to View Price</div>
+        
+        <!-- Add this Account Numbers Section -->
+        <div class="account-section">
+            <h3 class="account-title"><i class="fas fa-university"></i> Payment Accounts</h3>
+            <div class="account-list">
                 <div class="account-item">
-                    <span>Awash Hammad: 014251165418600</span>
-                    <button class="copy-btn" onclick="copyToClipboard('014251165418600', this)"><i class="fas fa-copy"></i> Copy</button>
+                    <div class="account-info">
+                        <span class="account-name">CBE</span>
+                        <span class="account-number">1000256789321</span>
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('1000256789321', this)">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 <div class="account-item">
-                    <span>CBE Ana: 1000577706682</span>
-                    <button class="copy-btn" onclick="copyToClipboard('1000577706682', this)"><i class="fas fa-copy"></i> Copy</button>
+                    <div class="account-info">
+                        <span class="account-name">Awash Bank</span>
+                        <span class="account-number">0134567890123</span>
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('0134567890123', this)">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
-                 <div class="account-item">
-                    <span>Tele birrr ismail: 0991719308</span>
-                    <button class="copy-btn" onclick="copyToClipboard('0991719308', this)"><i class="fas fa-copy"></i> Copy</button>
+                <div class="account-item">
+                    <div class="account-info">
+                        <span class="account-name">Dashen Bank</span>
+                        <span class="account-number">123456789012</span>
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('123456789012', this)">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
-                <!-- Add more accounts as needed -->
             </div>
-            <form id="regForm">
-                <div class="input-group">
-                    <i class="fas fa-graduation-cap"></i>
-                    <select id="year" required>
-                        <option value="" disabled selected>Select Year of Study</option>
-                        <option value="1">Pre Med - 100 ETB</option>
-                        <option value="2">Intro Med - 100 ETB</option>
-                        <option value="3">Meta - 100 ETB</option>
-                        <option value="4">Hema - 100 ETB</option>
-                        <option value="5">CVS - 100 ETB</option>
-                        <option value="6">RESPA - 100 ETB</option>
-                        <option value="7">Musclo - 100 ETB</option>
-                    </select>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-user"></i>
-                    <input id="name" placeholder="Full Name" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-phone"></i>
-                    <input id="phone" type="tel" placeholder="Phone Number" required>
-                </div>
-                <div class="input-group">
-                    <i class="fab fa-telegram-plane"></i>
-                    <input id="telegram" placeholder="Telegram Username (optional)">
-                </div>
-                <div class="file-upload">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <span id="uploadText">Upload Payment Receipt</span>
-                    <input id="receipt" type="file" accept="image/*" required>
-                </div>
-                <img id="receiptPreview" class="receipt-preview" alt="Receipt Preview">
-                <button type="submit" id="submitBtn"><i class="fas fa-paper-plane"></i>Submit</button>
-                <div id="regError" class="error"></div>
-            </form>
-            <div id="verifyForm" style="display:none">
-                <h2><i class="fas fa-lock"></i> Enter Verification Code</h2>
-                <div class="input-group">
-                    <i class="fas fa-key"></i>
-                    <input id="verifyCode" placeholder="6-digit code" maxlength="6" required>
-                </div>
-                <button id="verifyBtn"><i class="fas fa-check-circle"></i> Verify</button>
-                <button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back to Registration</button>
-                <div id="verifyError" class="error"></div>
+            <p class="payment-note">Please use your name as payment reference</p>
+        </div>
+        
+        <form id="regForm">
+            <!-- Your existing form fields remain the same -->
+            <div class="input-group">
+                <i class="fas fa-graduation-cap"></i>
+                <select id="year" required>
+                    <option value="" disabled selected>Select Year of Study</option>
+                    <option value="1">1st Year - 100 ETB</option>
+                    <option value="2">2nd Year - 120 ETB</option>
+                    <option value="3">3rd Year - 140 ETB</option>
+                    <option value="4">4th Year - 160 ETB</option>
+                </select>
             </div>
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input id="name" placeholder="Full Name" required>
+            </div>
+            <div class="input-group">
+                <i class="fas fa-phone"></i>
+                <input id="phone" type="tel" placeholder="Phone Number" required>
+            </div>
+            <div class="input-group">
+                <i class="fab fa-telegram-plane"></i>
+                <input id="telegram" placeholder="Telegram Username (optional)">
+            </div>
+            <div class="file-upload">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span id="uploadText">Upload Payment Receipt</span>
+                <input id="receipt" type="file" accept="image/*" required>
+            </div>
+            <img id="receiptPreview" class="receipt-preview" alt="Receipt Preview">
+            <button type="submit" id="submitBtn"><i class="fas fa-paper-plane"></i>Submit</button>
+            <div id="regError" class="error"></div>
+        </form>
+        
+        <!-- Your existing login and verification sections remain the same -->
+        <p id="loginLink" style="cursor:pointer; color:var(--primary);">Already registered? Login here</p>
+        <div id="loginForm" style="display:none">
+            <div class="input-group">
+                <i class="fas fa-phone"></i>
+                <input id="loginPhone" type="tel" placeholder="Phone Number" required>
+            </div>
+            <button id="loginSubmitBtn"><i class="fas fa-sign-in-alt"></i> Request Verification Code</button>
+            <div id="loginError" class="error"></div>
+        </div>
+        <p id="registerLink" style="display:none; cursor:pointer; color:var(--primary);">New user? Register here</p>
+        <div id="verifyForm" style="display:none">
+            <h2><i class="fas fa-lock"></i> Enter Verification Code</h2>
+            <div class="input-group">
+                <i class="fas fa-key"></i>
+                <input id="verifyCode" placeholder="6-digit code" maxlength="6" required>
+            </div>
+            <button id="verifyBtn"><i class="fas fa-check-circle"></i> Verify</button>
+            <button class="back-btn" id="backBtn"><i class="fas fa-arrow-left"></i> Back to Registration</button>
+            <div id="verifyError" class="error"></div>
         </div>
     </div>
-    <!-- Add Year Modal -->
-    <div id="addModal" style="display: none;">
-        <div class="modal-content">
-            <h2><i class="fas fa-plus"></i> Add program </h2>
-            <div class="price-info">Additional Charge: 50 ETB</div>
-            <div class="account-info">
-                <h3>Payment Accounts</h3>
+</div>
+
+<!-- Add Year Modal -->
+<div id="addModal" style="display: none;">
+    <div class="modal-content">
+        <h2><i class="fas fa-plus"></i> Add program </h2>
+        <div class="price-info">Additional Charge: 50 ETB</div>
+        
+        <!-- Add this Account Numbers Section -->
+        <div class="account-section">
+            <h3 class="account-title"><i class="fas fa-university"></i> Payment Accounts</h3>
+            <div class="account-list">
                 <div class="account-item">
-                    <span>CBE Ana: 1000577706682</span>
-                    <button class="copy-btn" onclick="copyToClipboard('1000577706682', this)"><i class="fas fa-copy"></i> Copy</button>
+                    <div class="account-info">
+                        <span class="account-name">CBE</span>
+                        <span class="account-number">1000256789321</span>
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('1000256789321', this)">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
                 <div class="account-item">
-                    <span>Awash Hammad: 014251165418600</span>
-                    <button class="copy-btn" onclick="copyToClipboard('014251165418600', this)"><i class="fas fa-copy"></i> Copy</button>
+                    <div class="account-info">
+                        <span class="account-name">Awash Bank</span>
+                        <span class="account-number">0134567890123</span>
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('0134567890123', this)">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
-                 <div class="account-item">
-                    <span>Tele birrr ismail: 0991719308</span>
-                    <button class="copy-btn" onclick="copyToClipboard('0991719308', this)"><i class="fas fa-copy"></i> Copy</button>
+                <div class="account-item">
+                    <div class="account-info">
+                        <span class="account-name">Dashen Bank</span>
+                        <span class="account-number">123456789012</span>
+                    </div>
+                    <button class="copy-btn" onclick="copyToClipboard('123456789012', this)">
+                        <i class="fas fa-copy"></i> Copy
+                    </button>
                 </div>
-                <!-- Add more accounts as needed -->
             </div>
-            <form id="addForm">
-                <div class="input-group">
-                    <i class="fas fa-user"></i>
-                    <input id="addName" placeholder="Full Name (for verification)" required>
-                </div>
-                <div class="input-group">
-                    <i class="fas fa-graduation-cap"></i>
-                    <select id="newYear" required>
-                        <option value="" disabled selected>Select New Year</option>
-                        <option value="1">PRE-MED</option>
-                        <option value="2">INTRODUCTION-MED</option>
-                        <option value="3">METABOLISM</option>
-                        <option value="4">HEMATOLOGY</option>
-                        <option value="5">CVS</option>
-                        <option value="6">RESPIRATORY</option>
-                        <option value="7">MUSCULOSKELETAL</option>
-                    </select>
-                </div>
-                <div class="file-upload">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <span id="addUploadText">Upload Payment Receipt (50 ETB)</span>
-                    <input id="addReceipt" type="file" accept="image/*" required>
-                </div>
-                <img id="addReceiptPreview" class="receipt-preview" alt="Receipt Preview">
-                <button type="submit" id="addSubmitBtn"><i class="fas fa-paper-plane"></i> Submit </button>
-                <div id="addError" class="error"></div>
-            </form>
-            <div id="addVerifyForm" style="display:none">
-                <h2><i class="fas fa-lock"></i> Enter Verification Code</h2>
-                <div class="input-group">
-                    <i class="fas fa-key"></i>
-                    <input id="addVerifyCode" placeholder="6-digit code" maxlength="6" required>
-                </div>
-                <button id="addVerifyBtn"><i class="fas fa-check-circle"></i> Verify</button>
-                <button class="back-btn" id="addBackBtn"><i class="fas fa-arrow-left"></i> Back to Addition</button>
-                <div id="addVerifyError" class="error"></div>
+            <p class="payment-note">Please use your name as payment reference</p>
+        </div>
+        
+        <form id="addForm">
+            <!-- Your existing add form fields remain the same -->
+            <div class="input-group">
+                <i class="fas fa-user"></i>
+                <input id="addName" placeholder="Full Name (for verification)" required>
             </div>
-            <button class="cancel-btn" id="closeAddModalBtn" style="margin-top: 1rem; width: 100%;"><i class="fas fa-times"></i> Cancel</button>
+            <div class="input-group">
+                <i class="fas fa-graduation-cap"></i>
+                <select id="newYear" required>
+                    <option value="" disabled selected>Select New Year</option>
+                    <option value="1">1st Year</option>
+                    <option value="2">2nd Year</option>
+                    <option value="3">3rd Year</option>
+                    <option value="4">4th Year</option>
+                </select>
+            </div>
+            <div class="file-upload">
+                <i class="fas fa-cloud-upload-alt"></i>
+                <span id="addUploadText">Upload Payment Receipt (50 ETB)</span>
+                <input id="addReceipt" type="file" accept="image/*" required>
+            </div>
+            <img id="addReceiptPreview" class="receipt-preview" alt="Receipt Preview">
+            <button type="submit" id="addSubmitBtn"><i class="fas fa-paper-plane"></i> Submit </button>
+            <div id="addError" class="error"></div>
+        </form>
+        <div id="addVerifyForm" style="display:none">
+            <h2><i class="fas fa-lock"></i> Enter Verification Code</h2>
+            <div class="input-group">
+                <i class="fas fa-key"></i>
+                <input id="addVerifyCode" placeholder="6-digit code" maxlength="6" required>
+            </div>
+            <button id="addVerifyBtn"><i class="fas fa-check-circle"></i> Verify</button>
+            <button class="back-btn" id="addBackBtn"><i class="fas fa-arrow-left"></i> Back to Addition</button>
+            <div id="addVerifyError" class="error"></div>
         </div>
     </div>
+</div>
     <!-- Confirm Add Modal -->
     <div id="confirmAddModal" style="display: none;">
         <div class="modal-content">
@@ -942,7 +1018,6 @@
             </div>
             <button id="confirmLogoutBtn"><i class="fas fa-check-circle"></i> Confirm Logout</button>
             <div id="logoutError" class="error"></div>
-            <button class="cancel-btn" id="cancelLogoutBtn" style="margin-top: 1rem; width: 100%;"><i class="fas fa-times"></i> Cancel</button>
         </div>
     </div>
     <!-- Header -->
@@ -968,47 +1043,32 @@
     <!-- Quizzes Content -->
     <main id="mainContent" class="main-content">
         <div class="page-header">
-            <h1 class="page-title"></h1>
-            <p class="page-subtitle"></p>
+            <h1 class="page-title">Medical Quiz Platform</h1>
+            <p class="page-subtitle">Test your medical knowledge with our comprehensive quiz collection</p>
         </div>
         <div class="year-filter">
             <div class="year-filter-container">
                 <button class="year-btn active" data-year="all">All</button>
-                <button class="year-btn" data-year="1"><i class="fas fa-book-medical"></i> PRE-MED</h2></button>
-                <button class="year-btn" data-year="2"><i class="fas fa-book-medical"></i> INTRODUCTION-MED</h2></button>
-                <button class="year-btn" data-year="3"><i class="fas fa-book-medical"></i> METABOLISM</h2></button>
-                <button class="year-btn" data-year="4"><i class="fas fa-book-medical"></i> HEMATOLOGY</h2></button>
-                <button class="year-btn" data-year="5"><i class="fas fa-book-medical"></i> CVS</h2></button>
-                <button class="year-btn" data-year="6"><i class="fas fa-book-medical"></i> RESPIRATORY</h2></button>
-                <button class="year-btn" data-year="7"><i class="fas fa-book-medical"></i> MUSCULOSKELETAL</h2></button>
+                <button class="year-btn" data-year="1">pre med</button>
+                <button class="year-btn" data-year="2">intro to med</button>
+                <button class="year-btn" data-year="3">pc1</button>
+                <button class="year-btn" data-year="4">pc2</button>
             </div>
         </div>
         <section class="year-section" data-year="1">
-            <h2 class="year-title"><i class="fas fa-book-medical"></i> PRE-MED</h2>
+            <h2 class="year-title"><i class="fas fa-book-medical"></i>Pre Med</h2>
             <div class="cards-container"></div>
         </section>
         <section class="year-section" data-year="2">
-            <h2 class="year-title"><i class="fas fa-book-medical"></i> INTRODUCTION-MED</h2>
+            <h2 class="year-title"><i class="fas fa-book-medical"></i>Intro to MED</h2>
             <div class="cards-container"></div>
         </section>
         <section class="year-section" data-year="3">
-            <h2 class="year-title"><i class="fas fa-book-medical"></i> METABOLISM</h2>
+            <h2 class="year-title"><i class="fas fa-book-medical"></i>PC1</h2>
             <div class="cards-container"></div>
         </section>
         <section class="year-section" data-year="4">
-            <h2 class="year-title"><i class="fas fa-book-medical"></i> HEMATOLOGY</h2>
-            <div class="cards-container"></div>
-        </section>
-        <section class="year-section" data-year="5">
-            <h2 class="year-title"><i class="fas fa-book-medical"></i> CVS</h2>
-            <div class="cards-container"></div>
-        </section>
-        <section class="year-section" data-year="6">
-            <h2 class="year-title"><i class="fas fa-book-medical"></i> RESPIRATORY</h2>
-            <div class="cards-container"></div>
-        </section>
-        <section class="year-section" data-year="7">
-            <h2 class="year-title"><i class="fas fa-book-medical"></i> MUSCULOSKELETAL</h2>
+            <h2 class="year-title"><i class="fas fa-book-medical"></i>PC2</h2>
             <div class="cards-container"></div>
         </section>
     </main>
@@ -1039,13 +1099,13 @@
                     <span class="info-value" id="profileYears"></span>
                     <span id="addYearBtn" class="add-year-btn"><i class="fas fa-plus"></i> Add</span>
                 </div>
+                
             </div>
             <div class="contact-section">
                 <h3 class="contact-title">Contact Us</h3>
                 <div class="contact-links">
-                    <a href="https://t.me/JUHealths" class="contact-link" target="_blank"><i class="fab fa-telegram-plane"></i></a>
-                    <a href="hammadhassen3@gmail.com" class="contact-link"><i class="fas fa-envelope"></i></a>
-                    <!-- Add more if needed -->
+                    <a href="https://t.me/yourchannel" class="contact-link" target="_blank"><i class="fab fa-telegram-plane"></i></a>
+                    <a href="mailto:support@medilearnpro.com" class="contact-link"><i class="fas fa-envelope"></i></a>
                 </div>
             </div>
             <div class="comment-section">
@@ -1079,7 +1139,7 @@ window.addEventListener('load', () => {
   sessionStorage.setItem('enteredFromHome_v2', 'yes');
   sessionStorage.setItem('enteredFromHome_time_v2', Math.floor(Date.now()/1000));
     </script>
-    <!-- Add this before closing </body> tag in ALL your HTML files -->
+
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <script>
   // Check if running inside Telegram
@@ -1118,6 +1178,20 @@ window.addEventListener('load', () => {
   history.pushState(null, '', location.href);
 </script>
     <script>
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyC4DSMVg4c98kQf5sSF8ueD631QgO4SXn0",
+            authDomain: "medical-quiz-40228.firebaseapp.com",
+            projectId: "medical-quiz-40228",
+            storageBucket: "medical-quiz-40228.firebasestorage.app",
+            messagingSenderId: "483043078873",
+            appId: "1:483043078873:web:4029dd83e53557f08b04c8"
+        };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
         // Security measures
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => {
@@ -1136,6 +1210,194 @@ window.addEventListener('load', () => {
             if (e.touches.length > 1) e.preventDefault();
         }, { passive: false });
         document.addEventListener('gesturestart', e => e.preventDefault());
+
+        // Firebase User Management
+        class FirebaseUserManager {
+            constructor() {
+                this.usersCollection = db.collection('users');
+            }
+
+            async checkPhoneExists(phone) {
+                const snapshot = await this.usersCollection.where('phone', '==', phone).get();
+                return !snapshot.empty;
+            }
+
+            isCodeExpired(timestamp) {
+                const now = new Date().getTime();
+                const twoDaysInMs = 2 * 24 * 60 * 60 * 1000;
+                return now - timestamp > twoDaysInMs;
+            }
+
+            async createUser(userData) {
+                try {
+                    if (await this.checkPhoneExists(userData.phone)) {
+                        return { success: false, error: 'Phone already registered. Please login.' };
+                    }
+                    const code = Math.floor(100000 + Math.random() * 900000).toString();
+                    const userRecord = {
+                        ...userData,
+                        verificationCode: code,
+                        codeTimestamp: new Date().getTime(),
+                        registeredYears: [userData.year],
+                        createdAt: new Date().getTime(),
+                        status: 'pending'
+                    };
+
+                    const docRef = await this.usersCollection.add(userRecord);
+                    return { success: true, userId: docRef.id, code };
+                } catch (error) {
+                    console.error('Error creating user:', error);
+                    return { success: false, error: error.message };
+                }
+            }
+
+            async login(phone) {
+                try {
+                    const snapshot = await this.usersCollection.where('phone', '==', phone).get();
+                    if (snapshot.empty) {
+                        return { success: false, error: 'Phone not registered. Please register.' };
+                    }
+                    const doc = snapshot.docs[0];
+                    const user = doc.data();
+                    if (user.verificationCode && !this.isCodeExpired(user.codeTimestamp)) {
+                        return { success: false, error: 'Account is currently active. Please logout first or contact admin.' };
+                    }
+                    const code = Math.floor(100000 + Math.random() * 900000).toString();
+                    await this.usersCollection.doc(doc.id).update({
+                        verificationCode: code,
+                        codeTimestamp: new Date().getTime(),
+                        status: 'pending'
+                    });
+                    return { success: true, code, userId: doc.id };
+                } catch (error) {
+                    console.error('Error logging in:', error);
+                    return { success: false, error: error.message };
+                }
+            }
+
+            async verifyUser(phone, code) {
+                try {
+                    const snapshot = await this.usersCollection.where('phone', '==', phone).get();
+                    if (snapshot.empty) {
+                        return { success: false, error: 'User not found' };
+                    }
+
+                    let user = null;
+                    let userDocId = null;
+                    
+                    snapshot.forEach(doc => {
+                        user = doc.data();
+                        userDocId = doc.id;
+                    });
+
+                    if (user.verificationCode !== code) {
+                        return { success: false, error: 'Invalid verification code' };
+                    }
+
+                    const codeTimestamp = user.codeTimestamp;
+                    const now = new Date().getTime();
+                    const twoDaysInMs = 2 * 24 * 60 * 60 * 1000;
+                    
+                    if (now - codeTimestamp > twoDaysInMs) {
+                        return { success: false, error: 'Verification code has expired' };
+                    }
+
+                    await this.usersCollection.doc(userDocId).update({
+                        status: 'verified',
+                        verifiedAt: new Date().getTime()
+                    });
+
+                    user.id = userDocId;
+                    user.status = 'verified';
+
+                    return { success: true, user };
+                } catch (error) {
+                    console.error('Error verifying user:', error);
+                    return { success: false, error: 'Verification failed' };
+                }
+            }
+
+            async addYearToUser(userId, newYear, userData) {
+                try {
+                    const userDoc = await this.usersCollection.doc(userId).get();
+                    if (!userDoc.exists) {
+                        return { success: false, error: 'User not found' };
+                    }
+
+                    const user = userDoc.data();
+                    const currentYears = user.registeredYears || [];
+
+                    if (currentYears.includes(newYear)) {
+                        return { success: false, error: 'Year already registered' };
+                    }
+
+                    const code = Math.floor(100000 + Math.random() * 900000).toString();
+                    
+                    await this.usersCollection.doc(userId).update({
+                        registeredYears: [...currentYears, newYear],
+                        verificationCode: code,
+                        codeTimestamp: new Date().getTime(),
+                        status: 'pending_addition'
+                    });
+
+                    return { success: true, code };
+                } catch (error) {
+                    console.error('Error adding year to user:', error);
+                    return { success: false, error: error.message };
+                }
+            }
+
+            async verifyYearAddition(userId, code) {
+                try {
+                    const userDoc = await this.usersCollection.doc(userId).get();
+                    if (!userDoc.exists) {
+                        return { success: false, error: 'User not found' };
+                    }
+
+                    const user = userDoc.data();
+
+                    if (user.verificationCode !== code) {
+                        return { success: false, error: 'Invalid verification code' };
+                    }
+
+                    const codeTimestamp = user.codeTimestamp;
+                    const now = new Date().getTime();
+                    const twoDaysInMs = 2 * 24 * 60 * 60 * 1000;
+                    
+                    if (now - codeTimestamp > twoDaysInMs) {
+                        return { success: false, error: 'Verification code has expired' };
+                    }
+
+                    await this.usersCollection.doc(userId).update({
+                        status: 'verified'
+                    });
+
+                    return { success: true, user: { id: userId, ...user, status: 'verified' } };
+                } catch (error) {
+                    console.error('Error verifying year addition:', error);
+                    return { success: false, error: 'Verification failed' };
+                }
+            }
+
+            async getUserByPhone(phone) {
+                try {
+                    const snapshot = await this.usersCollection.where('phone', '==', phone).get();
+                    if (snapshot.empty) return null;
+                    
+                    let user = null;
+                    snapshot.forEach(doc => {
+                        user = { id: doc.id, ...doc.data() };
+                    });
+                    return user;
+                } catch (error) {
+                    console.error('Error getting user:', error);
+                    return null;
+                }
+            }
+        }
+
+        const firebaseUserManager = new FirebaseUserManager();
+
         // Theme toggle
         const themeToggle = document.getElementById('themeToggle');
         function toggleTheme() {
@@ -1150,6 +1412,7 @@ window.addEventListener('load', () => {
             }
         }
         themeToggle.addEventListener('click', toggleTheme);
+
         // Quiz data
         const quizData = {
             1: [
@@ -1159,15 +1422,15 @@ window.addEventListener('load', () => {
                 { id: 9, title: "CIVIC", icon: "fas fa-flask", questions: 28, time: 22, difficulty: "intermediate", rating: 4.4, page: "year2/biochemistry-ii.html" }
             ],
             2: [
-                { id: 1, title: "Anatomy", icon: "fas fa-brain", questions: 700, time: 30, difficulty: "intermediate", rating: 4.8, page: "yr1/an.html" },
-                { id: 2, title: "Physiology", icon: "fas fa-microscope", questions: 600,time: 30, difficulty: "intermediate", rating: 4.8, page: "yr1/ps.html" },
-                { id: 3, title: "Biochemistry", icon: "fas fa-book", questions: 800, time: 30, difficulty: "intermediate", rating: 4.8, page: "yr1/bc.html" },
                 { id: 4, title: "Pathology", icon: "fas fa-flask", questions: 400, time: 30, difficulty: "intermediate", rating: 4.8, page: "yr1/pt.html" },
                 { id: 5, title: "Pharmacology", icon: "fas fa-heartbeat", questions: 400, time: 30, difficulty: "intermediate", rating: 4.8, page: "yr1/pc.html" },
                 { id: 6, title: "PCD", icon: "fas fa-heartbeat", questions: 150, time: 30, difficulty: "intermediate", rating: 4.8, page: "yr1/pcd.html" },
                 { id: 7, title: "PARASITOLOGY", icon: "fas fa-heartbeat", questions: 180, time: 30, difficulty: "intermediate", rating: 4.8, page: "yr1/pr.html" },
                 { id: 8, title: "immunology", icon: "fas fa-heartbeat", questions: 235, time: 30, difficulty: "intermediate", rating: 4.8, page: "yr1/im.html" },
-                { id: 9, title: "Microbiology", icon: "fas fa-heartbeat", questions: 320, time: 30, difficulty: "intermediate", rating: 4.8, page: "yr1/micro.html" }
+                { id: 9, title: "Microbiology", icon: "fas fa-heartbeat", questions: 320, time: 30, difficulty: "intermediate", rating: 4.8, page: "yr1/micro.html" },
+                { id: 1, title: "Anatomy", icon: "fas fa-brain", questions: 700, time: 30, difficulty: "intermediate", rating: 4.8, page: "yr1/an.html" },
+                { id: 2, title: "Physiology", icon: "fas fa-microscope", questions: 600,time: 30, difficulty: "intermediate", rating: 4.8, page: "yr1/ps.html" },
+                { id: 3, title: "Biochemistry", icon: "fas fa-book", questions: 800, time: 30, difficulty: "intermediate", rating: 4.8, page: "yr1/bc.html" }
             ],  
             3: [
                 { id: 10, title: "Anatomy", icon: "fas fa-virus", questions: 35, time: 30, difficulty: "intermediate", page: "year3/pathology.html", rating: 4.7 },
@@ -1206,21 +1469,19 @@ window.addEventListener('load', () => {
                 { id: 33, title: "Patho", icon: "fas fa-graduation-cap", questions: 60, time: 55, difficulty: "advanced", rating: 4.9, page: "year7/board-exam-prep.html" }
             ]
         };
+
         // Price data
         const prices = {
             1: 100,
-            2: 100,
-            3: 100,
-            4: 100,
-            5: 100,
-            6: 100,
-            7: 100,
-            8: 100
+            2: 120,
+            3: 140,
+            4: 160
         };
+
         // Render quiz cards
         function renderQuizCards() {
             const userYears = JSON.parse(localStorage.getItem('userYears')) || [];
-            for (let year = 1; year <= 7; year++) {
+            for (let year = 1; year <= 4; year++) {
                 const container = document.querySelector(`.year-section[data-year="${year}"] .cards-container`);
                 if (!container) continue;
                 container.innerHTML = '';
@@ -1260,6 +1521,7 @@ window.addEventListener('load', () => {
                 }
             }
         }
+
         // Year filter
         const yearButtons = document.querySelectorAll('.year-btn');
         const yearSections = document.querySelectorAll('.year-section');
@@ -1277,6 +1539,7 @@ window.addEventListener('load', () => {
                 }
             });
         });
+
         // Navigation
         const mainContent = document.getElementById('mainContent');
         const profileContent = document.getElementById('profileContent');
@@ -1304,10 +1567,12 @@ window.addEventListener('load', () => {
         // Registration logic
         const regModal = document.getElementById('registrationModal');
         const regForm = document.getElementById('regForm');
+        const loginForm = document.getElementById('loginForm');
         const verifyForm = document.getElementById('verifyForm');
         const logout = document.getElementById('logout');
         const logoutModal = document.getElementById('logoutModal');
         const regError = document.getElementById('regError');
+        const loginError = document.getElementById('loginError');
         const verifyError = document.getElementById('verifyError');
         const logoutError = document.getElementById('logoutError');
         const receiptInput = document.getElementById('receipt');
@@ -1316,12 +1581,34 @@ window.addEventListener('load', () => {
         const yearSelect = document.getElementById('year');
         const priceInfo = document.getElementById('priceInfo');
         const submitBtn = document.getElementById('submitBtn');
+        const loginSubmitBtn = document.getElementById('loginSubmitBtn');
         const backBtn = document.getElementById('backBtn');
+        const loginLink = document.getElementById('loginLink');
+        const registerLink = document.getElementById('registerLink');
+
+        // Toggle between register and login
+        loginLink.addEventListener('click', () => {
+            regForm.style.display = 'none';
+            loginForm.style.display = 'block';
+            registerLink.style.display = 'block';
+            loginLink.style.display = 'none';
+            verifyForm.style.display = 'none';
+        });
+
+        registerLink.addEventListener('click', () => {
+            regForm.style.display = 'block';
+            loginForm.style.display = 'none';
+            registerLink.style.display = 'none';
+            loginLink.style.display = 'block';
+            verifyForm.style.display = 'none';
+        });
+
         // Update price display on year selection
         yearSelect.addEventListener('change', () => {
             const year = yearSelect.value;
             priceInfo.textContent = year ? `Price: ${prices[year]} ETB` : 'Select Year to View Price';
         });
+
         // Receipt preview
         receiptInput.addEventListener('change', () => {
             const file = receiptInput.files[0];
@@ -1338,147 +1625,238 @@ window.addEventListener('load', () => {
                 uploadText.textContent = 'Upload Payment Receipt';
             }
         });
+    // Add this function to your existing JavaScript
+function copyToClipboard(text, button) {
+    navigator.clipboard.writeText(text).then(() => {
+        // Visual feedback without alert
+        const originalText = button.innerHTML;
+        button.innerHTML = '<i class="fas fa-check"></i> Copied!';
+        button.classList.add('copied');
+        
+        // Reset after 2 seconds
+        setTimeout(() => {
+            button.innerHTML = originalText;
+            button.classList.remove('copied');
+        }, 2000);
+        
+    }).catch(err => {
+        console.error('Failed to copy: ', err);
+        // Optional: Show error state briefly
+        button.innerHTML = '<i class="fas fa-times"></i> Failed';
+        button.style.background = 'var(--error)';
+        
+        setTimeout(() => {
+            button.innerHTML = '<i class="fas fa-copy"></i> Copy';
+            button.style.background = 'var(--primary)';
+        }, 2000);
+    });
+}
         // Check verification code expiry
         function isVerificationExpired(timestampKey) {
             const codeTimestamp = localStorage.getItem(timestampKey);
             if (!codeTimestamp) return true;
             const now = new Date().getTime();
-            const twoDaysInMs = 2 * 24 * 60 * 60 * 1000; // 2 days in milliseconds
+            const twoDaysInMs = 2 * 24 * 60 * 60 * 1000;
             return now - codeTimestamp > twoDaysInMs;
         }
+
         // Initialize modal state
-        if (localStorage.getItem('verified') === 'true') {
-            regModal.style.display = 'none';
-            mainContent.style.display = 'block';
-            renderQuizCards();
-        } else {
+        function init() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                if (user.status === 'verified') {
+                    regModal.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    renderQuizCards();
+                    return;
+                }
+            }
+            
             regModal.style.display = 'flex';
             mainContent.style.display = 'none';
             profileContent.style.display = 'none';
-            if (localStorage.getItem('pendingCode') && !isVerificationExpired('codeTimestamp')) {
+            registerLink.style.display = 'none';
+            loginLink.style.display = 'block';
+            
+            if (localStorage.getItem('pendingPhone') && !isVerificationExpired('codeTimestamp')) {
                 regForm.style.display = 'none';
+                loginForm.style.display = 'none';
                 verifyForm.style.display = 'block';
-                // Restore form inputs if available
-                yearSelect.value = localStorage.getItem('tempYear') || '';
-                document.getElementById('name').value = localStorage.getItem('userName') || '';
-                document.getElementById('phone').value = localStorage.getItem('userPhone') || '';
-                document.getElementById('telegram').value = localStorage.getItem('userTelegram') || '';
-                priceInfo.textContent = yearSelect.value ? `Price: ${prices[yearSelect.value]} ETB` : 'Select Year to View Price';
             } else {
-                localStorage.removeItem('pendingCode');
+                localStorage.removeItem('pendingPhone');
                 localStorage.removeItem('codeTimestamp');
-                localStorage.removeItem('tempYear');
-                localStorage.removeItem('userName');
-                localStorage.removeItem('userPhone');
-                localStorage.removeItem('userTelegram');
+                localStorage.removeItem('tempUserData');
             }
         }
+
         // Back button to return to registration form
         backBtn.addEventListener('click', () => {
             regForm.style.display = 'block';
+            loginForm.style.display = 'none';
+            registerLink.style.display = 'none';
+            loginLink.style.display = 'block';
             verifyForm.style.display = 'none';
             verifyError.textContent = '';
         });
-        // Multiple admins support
-        const adminChatIds = ['7897840965','2116326012','6445702745']; // Add more Telegram chat IDs here, e.g., ['7897840965', 'another_id', 'third_id']
 
-        async function sendToAllAdmins(url, formDataBase, isPhoto = false) {
-            let success = false;
-            let errorMsg = '';
-            for (const chatId of adminChatIds) {
-                const formData = new FormData();
-                for (const [key, value] of formDataBase.entries()) {
-                    formData.append(key, value);
-                }
-                formData.set('chat_id', chatId); // Override chat_id for each admin
-                try {
-                    const response = await fetch(url, {
-                        method: 'POST',
-                        body: formData
-                    });
-                    const data = await response.json();
-                    if (data.ok) {
-                        success = true;
-                    } else {
-                        errorMsg = data.description;
-                    }
-                } catch (err) {
-                    errorMsg = err.message;
-                }
-            }
-            return { ok: success, description: errorMsg };
-        }
-
+        // Registration form submission
         regForm.addEventListener('submit', async e => {
             e.preventDefault();
             submitBtn.classList.add('loading');
             submitBtn.disabled = true;
+            
             const year = document.getElementById('year').value;
             const name = document.getElementById('name').value;
             const phone = document.getElementById('phone').value;
             const telegram = document.getElementById('telegram').value || 'N/A';
             const receipt = document.getElementById('receipt').files[0];
+
             if (!year || !name || !phone || !receipt) {
                 regError.textContent = 'Please fill all required fields.';
                 submitBtn.classList.remove('loading');
                 submitBtn.disabled = false;
                 return;
             }
-            const code = Math.floor(100000 + Math.random() * 900000).toString();
-            localStorage.setItem('pendingCode', code);
-            localStorage.setItem('codeTimestamp', new Date().getTime());
-            localStorage.setItem('tempYear', year);
-            localStorage.setItem('userName', name);
-            localStorage.setItem('userPhone', phone);
-            localStorage.setItem('userTelegram', telegram);
-            const caption = `*New Registration*\n*Year:* ${year} (${prices[year]} ETB)\n*Name:* ${name}\n*Phone:* ${phone}\n*Telegram:* ${telegram}\n*Verification Code:* ${code}`;
-            const formData = new FormData();
-            formData.append('chat_id', 'placeholder'); // Will be overridden
-            formData.append('photo', receipt);
-            formData.append('caption', caption);
-            formData.append('parse_mode', 'Markdown');
-            const url = 'https://api.telegram.org/bot8237566699:AAHICwsiqIrs-4_vUdrsORPlD8-WFSFYB2Y/sendPhoto';
-            try {
-                const { ok, description } = await sendToAllAdmins(url, formData, true);
-                if (ok) {
-                    regForm.style.display = 'none';
-                    verifyForm.style.display = 'block';
-                    regError.textContent = '';
-                } else {
-                    regError.textContent = 'Error sending to Telegram: ' + description;
+
+            // Create user in Firebase
+            const userData = {
+                name: name,
+                phone: phone,
+                telegram: telegram,
+                year: year,
+                price: prices[year]
+            };
+
+            const result = await firebaseUserManager.createUser(userData);
+            
+            if (result.success) {
+                // Send to Telegram with the code
+                const caption = `New Registration\nYear: ${year} (${prices[year]} ETB)\nName: ${name}\nPhone: ${phone}\nCode: ${result.code}`;
+                const formData = new FormData();
+                formData.append('chat_id', '7897840965');
+                formData.append('photo', receipt);
+                formData.append('caption', caption);
+                formData.append('parse_mode', 'Markdown');
+
+                try {
+                    const response = await fetch('https://api.telegram.org/bot8237566699:AAHICwsiqIrs-4_vUdrsORPlD8-WFSFYB2Y/sendPhoto', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await response.json();
+                    if (data.ok) {
+                        // Store temporary data
+                        localStorage.setItem('pendingPhone', phone);
+                        localStorage.setItem('tempUserData', JSON.stringify(userData));
+                        localStorage.setItem('codeTimestamp', new Date().getTime());
+                        
+                        regForm.style.display = 'none';
+                        loginForm.style.display = 'none';
+                        verifyForm.style.display = 'block';
+                        regError.textContent = '';
+                    } else {
+                        regError.textContent = 'Error sending to Telegram: ' + data.description;
+                    }
+                } catch (err) {
+                    regError.textContent = 'Error: ' + err.message;
                 }
-            } catch (err) {
-                regError.textContent = 'Error: ' + err.message;
-            } finally {
-                submitBtn.classList.remove('loading');
-                submitBtn.disabled = false;
+            } else {
+                regError.textContent = 'Error creating user: ' + result.error;
             }
+
+            submitBtn.classList.remove('loading');
+            submitBtn.disabled = false;
         });
-        document.getElementById('verifyBtn').addEventListener('click', () => {
-            const enteredCode = document.getElementById('verifyCode').value;
-            if (isVerificationExpired('codeTimestamp')) {
-                verifyError.textContent = 'Verification code has expired. Please register again.';
-                localStorage.removeItem('pendingCode');
-                localStorage.removeItem('codeTimestamp');
-                localStorage.removeItem('tempYear');
-                localStorage.removeItem('userName');
-                localStorage.removeItem('userPhone');
-                localStorage.removeItem('userTelegram');
-                regForm.style.display = 'block';
-                verifyForm.style.display = 'none';
+
+        // Login submission
+        loginSubmitBtn.addEventListener('click', async () => {
+            loginSubmitBtn.classList.add('loading');
+            loginSubmitBtn.disabled = true;
+            const phone = document.getElementById('loginPhone').value;
+
+            if (!phone) {
+                loginError.textContent = 'Please enter phone number.';
+                loginSubmitBtn.classList.remove('loading');
+                loginSubmitBtn.disabled = false;
                 return;
             }
-            if (enteredCode === localStorage.getItem('pendingCode')) {
-                localStorage.setItem('userYears', JSON.stringify([localStorage.getItem('tempYear')]));
+
+            const result = await firebaseUserManager.login(phone);
+            
+            if (result.success) {
+                const user = await firebaseUserManager.getUserByPhone(phone);
+                const caption = `Login Request\nName: ${user.name}\nPhone: ${phone}\nTelegram: ${user.telegram}\nCode: ${result.code}`;
+                const formData = new FormData();
+                formData.append('chat_id', '7897840965');
+                formData.append('text', caption);
+                formData.append('parse_mode', 'Markdown');
+
+                try {
+                    const response = await fetch('https://api.telegram.org/bot8237566699:AAHICwsiqIrs-4_vUdrsORPlD8-WFSFYB2Y/sendMessage', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await response.json();
+                    if (data.ok) {
+                        localStorage.setItem('pendingPhone', phone);
+                        localStorage.setItem('codeTimestamp', new Date().getTime());
+                        regForm.style.display = 'none';
+                        loginForm.style.display = 'none';
+                        verifyForm.style.display = 'block';
+                        loginError.textContent = '';
+                    } else {
+                        loginError.textContent = 'Error sending to Telegram: ' + data.description;
+                    }
+                } catch (err) {
+                    loginError.textContent = 'Error: ' + err.message;
+                }
+            } else {
+                loginError.textContent = result.error;
+            }
+
+            loginSubmitBtn.classList.remove('loading');
+            loginSubmitBtn.disabled = false;
+        });
+
+        // Verification
+        document.getElementById('verifyBtn').addEventListener('click', async () => {
+            const enteredCode = document.getElementById('verifyCode').value;
+            const phone = localStorage.getItem('pendingPhone');
+
+            if (!phone) {
+                verifyError.textContent = 'Session expired. Please register again.';
+                return;
+            }
+
+            const result = await firebaseUserManager.verifyUser(phone, enteredCode);
+            
+            if (result.success) {
+                // Send verification notification to Telegram
+                const caption = `User Verified\nName: ${result.user.name}\nPhone: ${result.user.phone}\nYear(s): ${result.user.registeredYears.join(', ')}`;
+                const formData = new FormData();
+                formData.append('chat_id', '7897840965');
+                formData.append('text', caption);
+                formData.append('parse_mode', 'Markdown');
+                await fetch('https://api.telegram.org/bot8237566699:AAHICwsiqIrs-4_vUdrsORPlD8-WFSFYB2Y/sendMessage', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Store user data in localStorage
+                localStorage.setItem('currentUser', JSON.stringify(result.user));
+                localStorage.setItem('userYears', JSON.stringify(result.user.registeredYears));
                 localStorage.setItem('verified', 'true');
-                localStorage.removeItem('pendingCode');
+                localStorage.removeItem('pendingPhone');
+                localStorage.removeItem('tempUserData');
                 localStorage.removeItem('codeTimestamp');
-                localStorage.removeItem('tempYear');
+                
                 location.reload();
             } else {
-                verifyError.textContent = 'Invalid verification code.';
+                verifyError.textContent = result.error;
             }
         });
+
         // Add Year Logic
         const addModal = document.getElementById('addModal');
         const confirmAddModal = document.getElementById('confirmAddModal');
@@ -1494,7 +1872,6 @@ window.addEventListener('load', () => {
         const addYearBtn = document.getElementById('addYearBtn');
         const cancelAddBtn = document.getElementById('cancelAddBtn');
         const okAddBtn = document.getElementById('okAddBtn');
-        const closeAddModalBtn = document.getElementById('closeAddModalBtn');
 
         addYearBtn.addEventListener('click', () => {
             confirmAddModal.style.display = 'flex';
@@ -1510,10 +1887,6 @@ window.addEventListener('load', () => {
             addForm.style.display = 'block';
             addVerifyForm.style.display = 'none';
             document.getElementById('addName').value = localStorage.getItem('userName') || '';
-        });
-
-        closeAddModalBtn.addEventListener('click', () => {
-            addModal.style.display = 'none';
         });
 
         addReceiptInput.addEventListener('change', () => {
@@ -1538,16 +1911,16 @@ window.addEventListener('load', () => {
             addVerifyError.textContent = '';
         });
 
+        // Add year form submission
         addForm.addEventListener('submit', async e => {
             e.preventDefault();
             addSubmitBtn.classList.add('loading');
             addSubmitBtn.disabled = true;
+            
             const addName = document.getElementById('addName').value;
             const newYear = document.getElementById('newYear').value;
             const addReceipt = document.getElementById('addReceipt').files[0];
-            const userYears = JSON.parse(localStorage.getItem('userYears')) || [];
-            const phone = localStorage.getItem('userPhone');
-            const telegram = localStorage.getItem('userTelegram') || 'N/A';
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
             if (!addName || !newYear || !addReceipt) {
                 addError.textContent = 'Please fill all required fields.';
@@ -1555,73 +1928,81 @@ window.addEventListener('load', () => {
                 addSubmitBtn.disabled = false;
                 return;
             }
-            if (addName !== localStorage.getItem('userName')) {
+
+            if (addName !== currentUser.name) {
                 addError.textContent = 'Name does not match registered name.';
                 addSubmitBtn.classList.remove('loading');
                 addSubmitBtn.disabled = false;
                 return;
             }
-            if (userYears.includes(newYear)) {
-                addError.textContent = 'You are already registered for this year.';
-                addSubmitBtn.classList.remove('loading');
-                addSubmitBtn.disabled = false;
-                return;
-            }
 
-            const code = Math.floor(100000 + Math.random() * 900000).toString();
-            localStorage.setItem('addPendingCode', code);
-            localStorage.setItem('addCodeTimestamp', new Date().getTime());
-            localStorage.setItem('newUserYear', newYear);
+            const result = await firebaseUserManager.addYearToUser(currentUser.id, newYear, currentUser);
+            
+            if (result.success) {
+                // Send to Telegram
+                const caption = `Add Year\nYears: ${currentUser.registeredYears.join(', ')}\nNew Year: ${newYear}\nName: ${addName}\nPhone: ${currentUser.phone}\nCode: ${result.code}`;
+                const formData = new FormData();
+                formData.append('chat_id', '7897840965');
+                formData.append('photo', addReceipt);
+                formData.append('caption', caption);
+                formData.append('parse_mode', 'Markdown');
 
-            const caption = `*Add Year Request*\n*Current Years:* ${userYears.join(', ')}\n*New Year:* ${newYear}\n*Name:* ${addName}\n*Phone:* ${phone}\n*Telegram:* ${telegram}\n*Additional Fee: 50 ETB*\n*Verification Code:* ${code}`;
-            const formData = new FormData();
-            formData.append('chat_id', 'placeholder'); // Will be overridden
-            formData.append('photo', addReceipt);
-            formData.append('caption', caption);
-            formData.append('parse_mode', 'Markdown');
-            const url = 'https://api.telegram.org/bot8237566699:AAHICwsiqIrs-4_vUdrsORPlD8-WFSFYB2Y/sendPhoto';
-
-            try {
-                const { ok, description } = await sendToAllAdmins(url, formData, true);
-                if (ok) {
-                    addForm.style.display = 'none';
-                    addVerifyForm.style.display = 'block';
-                    addError.textContent = '';
-                } else {
-                    addError.textContent = 'Error sending to Telegram: ' + description;
+                try {
+                    const response = await fetch('https://api.telegram.org/bot8237566699:AAHICwsiqIrs-4_vUdrsORPlD8-WFSFYB2Y/sendPhoto', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    const data = await response.json();
+                    if (data.ok) {
+                        localStorage.setItem('pendingYearAddition', 'true');
+                        localStorage.setItem('addCodeTimestamp', new Date().getTime());
+                        addForm.style.display = 'none';
+                        addVerifyForm.style.display = 'block';
+                        addError.textContent = '';
+                    } else {
+                        addError.textContent = 'Error sending to Telegram: ' + data.description;
+                    }
+                } catch (err) {
+                    addError.textContent = 'Error: ' + err.message;
                 }
-            } catch (err) {
-                addError.textContent = 'Error: ' + err.message;
-            } finally {
-                addSubmitBtn.classList.remove('loading');
-                addSubmitBtn.disabled = false;
+            } else {
+                addError.textContent = 'Error adding year: ' + result.error;
             }
+
+            addSubmitBtn.classList.remove('loading');
+            addSubmitBtn.disabled = false;
         });
 
-        document.getElementById('addVerifyBtn').addEventListener('click', () => {
+        // Year addition verification
+        document.getElementById('addVerifyBtn').addEventListener('click', async () => {
             const enteredCode = document.getElementById('addVerifyCode').value;
-            if (isVerificationExpired('addCodeTimestamp')) {
-                addVerifyError.textContent = 'Verification code has expired. Please submit addition again.';
-                localStorage.removeItem('addPendingCode');
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
+            const result = await firebaseUserManager.verifyYearAddition(currentUser.id, enteredCode);
+            
+            if (result.success) {
+                // Send year addition verification notification to Telegram
+                const caption = `Year Added\nName: ${result.user.name}\nPhone: ${result.user.phone}\nYear(s): ${result.user.registeredYears.join(', ')}`;
+                const formData = new FormData();
+                formData.append('chat_id', '7897840965');
+                formData.append('text', caption);
+                formData.append('parse_mode', 'Markdown');
+                await fetch('https://api.telegram.org/bot8237566699:AAHICwsiqIrs-4_vUdrsORPlD8-WFSFYB2Y/sendMessage', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Update local storage
+                localStorage.setItem('currentUser', JSON.stringify(result.user));
+                localStorage.setItem('userYears', JSON.stringify(result.user.registeredYears));
+                localStorage.removeItem('pendingYearAddition');
                 localStorage.removeItem('addCodeTimestamp');
-                localStorage.removeItem('newUserYear');
-                addForm.style.display = 'block';
-                addVerifyForm.style.display = 'none';
-                return;
-            }
-            if (enteredCode === localStorage.getItem('addPendingCode')) {
-                const userYears = JSON.parse(localStorage.getItem('userYears')) || [];
-                const newYear = localStorage.getItem('newUserYear');
-                userYears.push(newYear);
-                localStorage.setItem('userYears', JSON.stringify(userYears));
-                localStorage.removeItem('addPendingCode');
-                localStorage.removeItem('addCodeTimestamp');
-                localStorage.removeItem('newUserYear');
+                
                 addModal.style.display = 'none';
                 loadProfile();
                 renderQuizCards();
             } else {
-                addVerifyError.textContent = 'Invalid verification code.';
+                addVerifyError.textContent = result.error;
             }
         });
 
@@ -1641,14 +2022,17 @@ window.addEventListener('load', () => {
 
         // Profile Logic
         function loadProfile() {
-            document.getElementById('profileName').textContent = localStorage.getItem('userName') || 'N/A';
-            document.getElementById('profilePhone').textContent = localStorage.getItem('userPhone') || 'N/A';
-            document.getElementById('profileTelegram').textContent = localStorage.getItem('userTelegram') || 'N/A';
-            const userYears = JSON.parse(localStorage.getItem('userYears')) || [];
-            document.getElementById('profileYears').textContent = userYears.join(', ') || 'N/A';
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            if (currentUser) {
+                document.getElementById('profileName').textContent = currentUser.name || 'N/A';
+                document.getElementById('profilePhone').textContent = currentUser.phone || 'N/A';
+                document.getElementById('profileTelegram').textContent = currentUser.telegram || 'N/A';
+                document.getElementById('profileYears').textContent = currentUser.registeredYears.join(', ') || 'N/A';
+            }
+            
             const profilePicSrc = localStorage.getItem('profilePic');
             const profilePic = document.getElementById('profilePic');
-            profilePic.src = profilePicSrc || 'https://via.placeholder.com/120?text=User'; // Default placeholder
+            profilePic.src = profilePicSrc || 'https://via.placeholder.com/120?text=User';
         }
 
         const profilePicInput = document.getElementById('profilePicInput');
@@ -1675,26 +2059,30 @@ window.addEventListener('load', () => {
                 commentError.textContent = 'Please write a message.';
                 return;
             }
-            const name = localStorage.getItem('userName');
-            const phone = localStorage.getItem('userPhone');
-            const telegram = localStorage.getItem('userTelegram') || 'N/A';
-            const caption = `*User Comment*\n*Name:* ${name}\n*Phone:* ${phone}\n*Telegram:* ${telegram}\n*Message:* ${message}`;
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const name = currentUser?.name;
+            const phone = currentUser?.phone;
+            const telegram = currentUser?.telegram || 'N/A';
+            const caption = `Comment\nName: ${name}\nPhone: ${phone}\nMessage: ${message}`;
 
             const formData = new FormData();
-            formData.append('chat_id', 'placeholder'); // Will be overridden
+            formData.append('chat_id', '7897840965');
             formData.append('text', caption);
             formData.append('parse_mode', 'Markdown');
-            const url = 'https://api.telegram.org/bot8237566699:AAHICwsiqIrs-4_vUdrsORPlD8-WFSFYB2Y/sendMessage';
 
             try {
                 sendCommentBtn.classList.add('loading');
-                const { ok, description } = await sendToAllAdmins(url, formData);
-                if (ok) {
+                const response = await fetch('https://api.telegram.org/bot8237566699:AAHICwsiqIrs-4_vUdrsORPlD8-WFSFYB2Y/sendMessage', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                if (data.ok) {
                     commentBox.value = '';
                     commentError.textContent = '';
                     alert('Comment sent successfully!');
                 } else {
-                    commentError.textContent = 'Error sending comment: ' + description;
+                    commentError.textContent = 'Error sending comment: ' + data.description;
                 }
             } catch (err) {
                 commentError.textContent = 'Error: ' + err.message;
@@ -1708,24 +2096,28 @@ window.addEventListener('load', () => {
             e.preventDefault();
             const logoutCode = Math.floor(100000 + Math.random() * 900000).toString();
             localStorage.setItem('logoutCode', logoutCode);
-            const userYears = JSON.parse(localStorage.getItem('userYears')) || [];
-            const name = localStorage.getItem('userName');
-            const phone = localStorage.getItem('userPhone');
-            const telegram = localStorage.getItem('userTelegram');
-            const caption = `*Logout Request*\n*Years:* ${userYears.join(', ')}\n*Name:* ${name}\n*Phone:* ${phone}\n*Telegram:* ${telegram}\n*Logout Verification Code:* ${logoutCode}`;
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const userYears = currentUser?.registeredYears || [];
+            const name = currentUser?.name;
+            const phone = currentUser?.phone;
+            const telegram = currentUser?.telegram;
+            const caption = `Logout Request\nName: ${name}\nPhone: ${phone}\nCode: ${logoutCode}`;
             const formData = new FormData();
-            formData.append('chat_id', 'placeholder'); // Will be overridden
+            formData.append('chat_id', '7897840965');
             formData.append('text', caption);
             formData.append('parse_mode', 'Markdown');
-            const url = 'https://api.telegram.org/bot8237566699:AAHICwsiqIrs-4_vUdrsORPlD8-WFSFYB2Y/sendMessage';
             try {
-                const { ok, description } = await sendToAllAdmins(url, formData);
-                if (ok) {
+                const response = await fetch('https://api.telegram.org/bot8237566699:AAHICwsiqIrs-4_vUdrsORPlD8-WFSFYB2Y/sendMessage', {
+                    method: 'POST',
+                    body: formData
+                });
+                const data = await response.json();
+                if (data.ok) {
                     logoutModal.style.display = 'flex';
                     regModal.style.display = 'none';
                     logoutError.textContent = '';
                 } else {
-                    logoutError.textContent = 'Error sending logout code: ' + description;
+                    logoutError.textContent = 'Error sending logout code: ' + data.description;
                 }
             } catch (err) {
                 logoutError.textContent = 'Error: ' + err.message;
@@ -1734,42 +2126,38 @@ window.addEventListener('load', () => {
         logout.addEventListener('click', logoutHandler);
         document.getElementById('profileLogoutBtn').addEventListener('click', logoutHandler);
 
-        document.getElementById('confirmLogoutBtn').addEventListener('click', () => {
+        document.getElementById('confirmLogoutBtn').addEventListener('click', async () => {
             const enteredCode = document.getElementById('logoutCode').value;
+            const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+            const name = currentUser?.name;
+            const phone = currentUser?.phone;
             if (enteredCode === localStorage.getItem('logoutCode')) {
+                // Send logout confirmation to Telegram
+                const caption = `User Logged Out\nName: ${name}\nPhone: ${phone}`;
+                const formData = new FormData();
+                formData.append('chat_id', '7897840965');
+                formData.append('text', caption);
+                formData.append('parse_mode', 'Markdown');
+                await fetch('https://api.telegram.org/bot8237566699:AAHICwsiqIrs-4_vUdrsORPlD8-WFSFYB2Y/sendMessage', {
+                    method: 'POST',
+                    body: formData
+                });
+
+                // Remove verification code from Firebase
+                await firebaseUserManager.usersCollection.doc(currentUser.id).update({
+                    verificationCode: null
+                });
+
                 localStorage.clear();
                 location.reload();
             } else {
                 logoutError.textContent = 'Invalid logout code.';
             }
         });
-        const cancelLogoutBtn = document.getElementById('cancelLogoutBtn');
-        cancelLogoutBtn.addEventListener('click', () => {
-            logoutModal.style.display = 'none';
-        });
+
         // Initialize
+        init();
         renderQuizCards();
-        // Copy to clipboard function
-        function copyToClipboard(text, button) {
-            navigator.clipboard.writeText(text).then(() => {
-                let alert = button.parentNode.querySelector('.copied-alert');
-                if (!alert) {
-                    alert = document.createElement('span');
-                    alert.className = 'copied-alert';
-                    alert.textContent = 'Copied!';
-                    button.parentNode.appendChild(alert);
-                }
-                alert.classList.add('show');
-                setTimeout(() => {
-                    alert.classList.remove('show');
-                    setTimeout(() => {
-                        alert.remove();
-                    }, 300);
-                }, 2000);
-            }).catch(err => {
-                console.error('Failed to copy: ', err);
-            });
-        }
     </script>
 </body>
 </html>
