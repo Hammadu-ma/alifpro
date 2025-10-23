@@ -1661,60 +1661,34 @@ function copyToClipboard(text, button) {
         }
 
         // Initialize modal state
-        // Replace your entire init() function with this:
-async function init() {
-    console.log('Checking user authentication...');
-    
-    const currentUser = localStorage.getItem('currentUser');
-    
-    if (currentUser) {
-        try {
-            const user = JSON.parse(currentUser);
-            console.log('Found cached user:', user.name);
+        function init() {
+            const currentUser = localStorage.getItem('currentUser');
+            if (currentUser) {
+                const user = JSON.parse(currentUser);
+                if (user.status === 'verified') {
+                    regModal.style.display = 'none';
+                    mainContent.style.display = 'block';
+                    renderQuizCards();
+                    return;
+                }
+            }
             
-            // Verify with Firebase
-            const latestUser = await firebaseUserManager.getUserByPhone(user.phone);
+            regModal.style.display = 'flex';
+            mainContent.style.display = 'none';
+            profileContent.style.display = 'none';
+            registerLink.style.display = 'none';
+            loginLink.style.display = 'block';
             
-            if (latestUser && latestUser.status === 'verified') {
-                console.log('User is verified in Firebase');
-                // Update localStorage with latest data
-                localStorage.setItem('currentUser', JSON.stringify(latestUser));
-                localStorage.setItem('userYears', JSON.stringify(latestUser.registeredYears));
-                
-                regModal.style.display = 'none';
-                mainContent.style.display = 'block';
-                renderQuizCards();
+            if (localStorage.getItem('pendingPhone') && !isVerificationExpired('codeTimestamp')) {
+                regForm.style.display = 'none';
+                loginForm.style.display = 'none';
+                verifyForm.style.display = 'block';
             } else {
-                console.log('User is NOT verified in Firebase - logging out');
-                localStorage.clear();
-                showRegistrationModal();
-            }
-        } catch (error) {
-            console.error('Error checking user status:', error);
-            localStorage.clear();
-            showRegistrationModal();
-        }
-    } else {
-        console.log('No cached user found');
-        showRegistrationModal();
-    }
-}
-
-// Also add this to force status check on page load
-document.addEventListener('DOMContentLoaded', function() {
-    // Check status every minute
-    setInterval(async () => {
-        const currentUser = localStorage.getItem('currentUser');
-        if (currentUser) {
-            const user = JSON.parse(currentUser);
-            const latestUser = await firebaseUserManager.getUserByPhone(user.phone);
-            if (!latestUser || latestUser.status !== 'verified') {
-                localStorage.clear();
-                location.reload();
+                localStorage.removeItem('pendingPhone');
+                localStorage.removeItem('codeTimestamp');
+                localStorage.removeItem('tempUserData');
             }
         }
-    }, 60000);
-});
 
         // Back button to return to registration form
         backBtn.addEventListener('click', () => {
