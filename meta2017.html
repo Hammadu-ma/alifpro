@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>JUMJ Admin Suite | نور التلاوة</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --emerald: #1e5944;
+            --emerald-light: #2f8b68;
+            --gold: #d4af37;
+            --gold-dark: #b88d2e;
+            --cream: #fef9e6;
+            --text-dark: #2c2418;
+            --text-muted: #6b5a3e;
+            --shadow-sm: 0 4px 12px rgba(0,0,0,0.05);
+            --shadow-md: 0 8px 24px rgba(0,0,0,0.08);
+            --border: #e9e2d0;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(145deg, #f7f3e8 0%, #fef7e8 100%);
+            min-height: 100vh;
+            padding: 1.5rem;
+        }
+
+        .dashboard-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        /* header */
+        .admin-header {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 1rem 2rem;
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            box-shadow: var(--shadow-md);
+            border: 1px solid rgba(212,175,55,0.2);
+        }
+
+        .logo h1 {
+            font-size: 1.5rem;
+            background: linear-gradient(135deg, var(--emerald), var(--gold));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+            transform: translateY(-2px);
+        }
+
+        /* stats cards */
+        .stats-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 1.2rem;
+            padding: 1.2rem;
+            box-shadow: var(--shadow-sm);
+            border-left: 6px solid var(--gold);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .stat-number {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--emerald);
+        }
+
+        /* tabs */
+        .tabs {
+            display: flex;
+            gap: 0.8rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            background: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 3rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .tab-btn {
+            background: transparent;
+            border: none;
+            padding: 0.6rem 1.5rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+            color: var(--text-muted);
+        }
+
+        .tab-btn.active {
+            background: var(--emerald);
+            color: white;
+            box-shadow: 0 4px 12px rgba(30,89,68,0.3);
+        }
+
+        /* panel */
+        .panel {
+            background: white;
+            border-radius: 1.8rem;
+            padding: 1.8rem;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 2rem;
+            border: 1px solid rgba(212,175,55,0.15);
+        }
+
+        .panel h2 {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            color: var(--emerald);
+            margin-bottom: 1.5rem;
+            font-size: 1.4rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.4rem;
+        }
+
+        label {
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        input, textarea, select {
+            padding: 0.7rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 1rem;
+            font-family: inherit;
+            transition: 0.2s;
+            background: #fefcf8;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(212,175,55,0.2);
+        }
+
+        button {
+            background: var(--emerald);
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button.secondary {
+            background: #6b7280;
+        }
+
+        button.danger {
+            background: #ef4444;
+        }
+
+        button.outline {
+            background: transparent;
+            border: 1.5px solid var(--gold);
+            color: var(--gold-dark);
+        }
+
+        .item-list {
+            margin-top: 2rem;
+            border-top: 2px dashed var(--border);
+            padding-top: 1.5rem;
+        }
+
+        .item-card {
+            background: #fefaf0;
+            border-radius: 1.2rem;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            transition: 0.2s;
+            border: 1px solid #f0e5d0;
+        }
+
+        .item-card:hover {
+            background: #fff6e5;
+            transform: translateX(4px);
+        }
+
+        .file-row {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: #f4f0e6;
+            padding: 0.5rem;
+            border-radius: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: #1f2937;
+            color: white;
+            padding: 0.8rem 1.5rem;
+            border-radius: 3rem;
+            display: none;
+            z-index: 2000;
+            font-weight: 500;
+        }
+
+        @media (max-width: 700px) {
+            body { padding: 1rem; }
+            .tabs { border-radius: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+<div class="dashboard-container" id="adminApp">
+    <div class="admin-header">
+        <div class="logo"><h1><i class="fas fa-crown"></i> JUMJ · نور الإدارة</h1></div>
+        <button class="logout-btn" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> Exit Admin</button>
+    </div>
+
+    <div class="stats-row" id="statsRow">
+        <div class="stat-card"><div><span class="stat-number" id="statAnnounce">0</span><br>Announcements</div><i class="fas fa-bullhorn fa-2x" style="color:var(--gold);"></i></div>
+        <div class="stat-card"><div><span class="stat-number" id="statCourses">0</span><br>Qiraat Courses</div><i class="fas fa-chalkboard-user fa-2x" style="color:var(--gold);"></i></div>
+        <div class="stat-card"><div><span class="stat-number" id="statKitabs">0</span><br>Kitab Books</div><i class="fas fa-book fa-2x" style="color:var(--gold);"></i></div>
+        <div class="stat-card"><div><span class="stat-number" id="statLegacy">0</span><br>Legacy Circles</div><i class="fas fa-landmark fa-2x" style="color:var(--gold);"></i></div>
+    </div>
+
+    <div class="tabs" id="adminTabs">
+        <button class="tab-btn active" data-tab="announce">📢 Announcements</button>
+        <button class="tab-btn" data-tab="qiraat">📖 Qiraat (Levels)</button>
+        <button class="tab-btn" data-tab="kitab">📚 Kitab Library</button>
+        <button class="tab-btn" data-tab="legacy">🕌 Legacy Qiraats</button>
+    </div>
+
+    <!-- Announcements Panel -->
+    <div id="announcePanel" class="panel">
+        <h2><i class="fas fa-bullhorn"></i> Manage Announcements</h2>
+        <form id="announceForm">
+            <input type="hidden" id="announceId">
+            <div class="form-grid">
+                <div class="form-group"><label>Title</label><input type="text" id="annTitle" required placeholder="e.g., New Session Open"></div>
+                <div class="form-group"><label>Active?</label><select id="annActive"><option value="true">Active</option><option value="false">Inactive</option></select></div>
+                <div class="form-group full-width"><label>Message</label><textarea id="annMessage" rows="2" required placeholder="Announcement details..."></textarea></div>
+            </div>
+            <div><button type="submit"><i class="fas fa-save"></i> Save Announcement</button> <button type="button" id="cancelAnnounce" class="secondary">Cancel</button></div>
+        </form>
+        <div class="item-list" id="announceList"></div>
+    </div>
+
+    <!-- Qiraat Courses Panel -->
+    <div id="qiraatPanel" class="panel" style="display:none;">
+        <h2><i class="fas fa-chalkboard"></i> Qiraat Courses (Level 1/2/3)</h2>
+        <form id="qiraatForm">
+            <input type="hidden" id="qiraatId">
+            <div class="form-grid">
+                <div class="form-group"><label>Title</label><input type="text" id="qTitle" required></div>
+                <div class="form-group"><label>Teacher</label><input type="text" id="qTeacher"></div>
+                <div class="form-group"><label>Days</label><input type="text" id="qDays" placeholder="Mon-Thu"></div>
+                <div class="form-group"><label>Time</label><input type="text" id="qTime" placeholder="Maghrib-Isha"></div>
+                <div class="form-group"><label>Venue</label><input type="text" id="qVenue"></div>
+                <div class="form-group"><label>Level</label><select id="qLevel"><option value="level1">Level 1</option><option value="level2">Level 2</option><option value="level3">Level 3</option></select></div>
+            </div>
+            <div class="form-group"><label>📎 Upload Files (PDF/PPT)</label><input type="file" id="qFiles" multiple accept=".pdf,.ppt,.pptx"><button type="button" id="uploadQFilesBtn" class="outline" style="margin-top: 8px;">Upload to this course</button></div>
+            <div id="qFilesList" style="margin: 0.5rem 0;"></div>
+            <div><button type="submit"><i class="fas fa-save"></i> Save Course</button> <button type="button" id="cancelQiraat" class="secondary">Cancel</button></div>
+        </form>
+        <div class="item-list" id="qiraatList"></div>
+    </div>
+
+    <!-- Kitab Library Panel -->
+    <div id="kitabPanel" class="panel" style="display:none;">
+        <h2><i class="fas fa-book"></i> Kitab Library</h2>
+        <form id="kitabForm">
+            <input type="hidden" id="kitabId">
+            <div class="form-grid">
+                <div class="form-group"><label>Kitab Name</label><input type="text" id="kitabName" required></div>
+                <div class="form-group"><label>Teacher</label><input type="text" id="kitabTeacher"></div>
+                <div class="form-group"><label>Schedule Time</label><input type="text" id="kitabSchedule" required></div>
+                <div class="form-group"><label>Image URL (optional)</label><input type="url" id="kitabImage" placeholder="https://..."></div>
+                <div class="form-group full-width"><label>Description</label><textarea id="kitabDesc" rows="2"></textarea></div>
+            </div>
+            <div class="form-group"><label>📁 Attach Files</label><input type="file" id="kitabFilesInput" multiple accept=".pdf,.ppt,.pptx"><button type="button" id="uploadKitabFilesBtn" class="outline">Upload to Kitab</button></div>
+            <div id="kitabFilesList"></div>
+            <div><button type="submit"><i class="fas fa-save"></i> Save Kitab</button> <button type="button" id="cancelKitab" class="secondary">Cancel</button></div>
+        </form>
+        <div class="item-list" id="kitabList"></div>
+    </div>
+
+    <!-- Legacy Qiraats Panel -->
+    <div id="legacyPanel" class="panel" style="display:none;">
+        <h2><i class="fas fa-history"></i> Legacy / Ongoing Qiraats</h2>
+        <form id="legacyForm">
+            <input type="hidden" id="legacyId">
+            <div class="form-grid">
+                <div class="form-group"><label>Course Name (Darsii)</label><input type="text" id="legacyName" required></div>
+                <div class="form-group"><label>Teacher (Ustaza)</label><input type="text" id="legacyTeacher" required></div>
+                <div class="form-group"><label>Schedule (Guyyaa fi Yeroo)</label><input type="text" id="legacySchedule" required></div>
+                <div class="form-group"><label>Venue (Bakka)</label><input type="text" id="legacyVenue" required></div>
+            </div>
+            <div><button type="submit"><i class="fas fa-save"></i> Save Legacy Entry</button> <button type="button" id="cancelLegacy" class="secondary">Cancel</button></div>
+        </form>
+        <div class="item-list" id="legacyList"></div>
+    </div>
+</div>
+<div id="toast" class="toast"></div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, collection, getDocs, addDoc, updateDoc, deleteDoc, doc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-storage.js";
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyAR_g5y04YAGCrTvZCowrE7hw8h7k1du08",
+        authDomain: "jujm-qirat.firebaseapp.com",
+        projectId: "jujm-qirat",
+        storageBucket: "jujm-qirat.firebasestorage.app",
+        messagingSenderId: "253413984903",
+        appId: "1:253413984903:web:c1577e0fdef1711f960622"
+    };
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const storage = getStorage(app);
+
+    let currentTab = "announce";
+    let currentEdit = { type: null, id: null };
+
+    // Helper
+    function showToast(msg, isErr = false) {
+        const toast = document.getElementById('toast');
+        toast.textContent = msg;
+        toast.style.background = isErr ? '#dc2626' : '#10b981';
+        toast.style.display = 'block';
+        setTimeout(() => toast.style.display = 'none', 3000);
+    }
+
+    // Auth (simple secure prompt)
+    if (!sessionStorage.getItem('adminAuth')) {
+        const pwd = prompt("🔐 Admin Access Key:");
+        if (pwd === "jUMJadmin2025") sessionStorage.setItem('adminAuth', 'true');
+        else { alert("Invalid key"); location.reload(); }
+    }
+    document.getElementById('logoutBtn').onclick = () => { sessionStorage.clear(); location.reload(); };
+
+    // Tab switching
+    const tabs = document.querySelectorAll('.tab-btn');
+    const panels = {
+        announce: document.getElementById('announcePanel'),
+        qiraat: document.getElementById('qiraatPanel'),
+        kitab: document.getElementById('kitabPanel'),
+        legacy: document.getElementById('legacyPanel')
+    };
+    tabs.forEach(btn => {
+        btn.addEventListener('click', () => {
+            currentTab = btn.dataset.tab;
+            tabs.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+            Object.values(panels).forEach(p => p.style.display = 'none');
+            panels[currentTab].style.display = 'block';
+            if (currentTab === 'announce') loadAnnouncements();
+            if (currentTab === 'qiraat') loadQiraatCourses();
+            if (currentTab === 'kitab') loadKitabs();
+            if (currentTab === 'legacy') loadLegacy();
+        });
+    });
+
+    // ------------------- Announcements -------------------
+    async function loadAnnouncements() {
+        const snap = await getDocs(collection(db, "announcements"));
+        const listDiv = document.getElementById('announceList');
+        listDiv.innerHTML = '';
+        let count = 0;
+        snap.forEach(docSnap => { count++;
+            const d = docSnap.data();
+            listDiv.innerHTML += `<div class="item-card"><div><strong>${escapeHtml(d.title)}</strong><br>${escapeHtml(d.message)}<br><span class="badge">${d.active ? '✅ Active' : '⛔ Inactive'}</span></div>
+            <div><button onclick="editAnnounce('${docSnap.id}', '${escapeHtml(d.title)}', '${escapeHtml(d.message)}', ${d.active})">Edit</button> <button class="danger" onclick="deleteAnnounce('${docSnap.id}')">Delete</button></div></div>`;
+        });
+        document.getElementById('statAnnounce').innerText = count;
+        window.editAnnounce = (id, title, msg, active) => {
+            document.getElementById('announceId').value = id;
+            document.getElementById('annTitle').value = title;
+            document.getElementById('annMessage').value = msg;
+            document.getElementById('annActive').value = active ? 'true' : 'false';
+        };
+        window.deleteAnnounce = async (id) => { if(confirm("Delete announcement?")) { await deleteDoc(doc(db, "announcements", id)); showToast("Deleted"); loadAnnouncements(); } };
+    }
+    document.getElementById('announceForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('announceId').value;
+        const data = { title: document.getElementById('annTitle').value, message: document.getElementById('annMessage').value, active: document.getElementById('annActive').value === 'true', updatedAt: new Date() };
+        if (id) await updateDoc(doc(db, "announcements", id), data);
+        else await addDoc(collection(db, "announcements"), { ...data, createdAt: new Date() });
+        showToast("Saved");
+        document.getElementById('announceForm').reset(); document.getElementById('announceId').value = '';
+        loadAnnouncements();
+    });
+    document.getElementById('cancelAnnounce').onclick = () => { document.getElementById('announceForm').reset(); document.getElementById('announceId').value = ''; };
+
+    // ------------------- Qiraat Courses -------------------
+    let currentQFiles = [];
+    async function loadQiraatCourses() {
+        const snap = await getDocs(collection(db, "qiraatCourses"));
+        const listDiv = document.getElementById('qiraatList');
+        listDiv.innerHTML = '';
+        let count = 0;
+        snap.forEach(docSnap => { count++;
+            const d = docSnap.data();
+            listDiv.innerHTML += `<div class="item-card"><div><strong>${escapeHtml(d.title)}</strong> (${d.level})<br>${d.teacher || ''} | ${d.days || ''} ${d.time || ''}<br><small>${d.venue || ''}</small></div>
+            <div><button onclick="editQiraat('${docSnap.id}')">Edit</button> <button class="danger" onclick="deleteQiraat('${docSnap.id}')">Delete</button></div></div>`;
+        });
+        document.getElementById('statCourses').innerText = count;
+        window.editQiraat = async (id) => {
+            const snap = await getDocs(collection(db, "qiraatCourses"));
+            const docData = snap.docs.find(d => d.id === id).data();
+            document.getElementById('qiraatId').value = id;
+            document.getElementById('qTitle').value = docData.title;
+            document.getElementById('qTeacher').value = docData.teacher || '';
+            document.getElementById('qDays').value = docData.days || '';
+            document.getElementById('qTime').value = docData.time || '';
+            document.getElementById('qVenue').value = docData.venue || '';
+            document.getElementById('qLevel').value = docData.level || 'level1';
+            currentQFiles = docData.files || [];
+            renderQFilesList();
+        };
+        window.deleteQiraat = async (id) => { if(confirm("Delete course?")) { await deleteDoc(doc(db, "qiraatCourses", id)); showToast("Deleted"); loadQiraatCourses(); } };
+    }
+    function renderQFilesList() {
+        const container = document.getElementById('qFilesList');
+        if (!container) return;
+        container.innerHTML = currentQFiles.map(f => `<div class="file-row"><i class="fas fa-file-pdf"></i> ${escapeHtml(f.name)} <button type="button" class="danger" data-qfile="${f.name}" style="padding:0.2rem 0.8rem;">Remove</button></div>`).join('');
+        document.querySelectorAll('[data-qfile]').forEach(btn => btn.addEventListener('click', async (e) => {
+            const fileName = btn.dataset.qfile;
+            const id = document.getElementById('qiraatId').value;
+            if (!id) return;
+            const fileObj = currentQFiles.find(f => f.name === fileName);
+            if (fileObj) {
+                const pathRef = ref(storage, `qiraat_files/${id}/${fileName}`);
+                await deleteObject(pathRef).catch(()=>{});
+                currentQFiles = currentQFiles.filter(f => f.name !== fileName);
+                await updateDoc(doc(db, "qiraatCourses", id), { files: currentQFiles });
+                renderQFilesList();
+                showToast("File removed");
+            }
+        }));
+    }
+    document.getElementById('uploadQFilesBtn').onclick = async () => {
+        const id = document.getElementById('qiraatId').value;
+        if (!id) return showToast("Save the course first (create or edit)", true);
+        const files = document.getElementById('qFiles').files;
+        if (!files.length) return;
+        const uploaded = [];
+        for (const file of files) {
+            const ext = file.name.split('.').pop().toLowerCase();
+            const type = ext === 'pdf' ? 'pdf' : (ext === 'ppt' || ext === 'pptx' ? 'ppt' : 'other');
+            const path = `qiraat_files/${id}/${file.name}`;
+            const fileRef = ref(storage, path);
+            await uploadBytes(fileRef, file);
+            const url = await getDownloadURL(fileRef);
+            uploaded.push({ name: file.name, url, type });
+        }
+        const newFiles = [...currentQFiles, ...uploaded];
+        await updateDoc(doc(db, "qiraatCourses", id), { files: newFiles });
+        currentQFiles = newFiles;
+        renderQFilesList();
+        showToast(`Uploaded ${uploaded.length} files`);
+    };
+    document.getElementById('qiraatForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('qiraatId').value;
+        const data = { title: document.getElementById('qTitle').value, teacher: document.getElementById('qTeacher').value, days: document.getElementById('qDays').value, time: document.getElementById('qTime').value, venue: document.getElementById('qVenue').value, level: document.getElementById('qLevel').value, updatedAt: new Date() };
+        if (id) { await updateDoc(doc(db, "qiraatCourses", id), data); if (currentQFiles.length) await updateDoc(doc(db, "qiraatCourses", id), { files: currentQFiles }); }
+        else { const newRef = await addDoc(collection(db, "qiraatCourses"), { ...data, files: [], createdAt: new Date() }); document.getElementById('qiraatId').value = newRef.id; showToast("Course created, now upload files"); }
+        loadQiraatCourses();
+    });
+    document.getElementById('cancelQiraat').onclick = () => { document.getElementById('qiraatForm').reset(); document.getElementById('qiraatId').value = ''; currentQFiles = []; renderQFilesList(); };
+
+    // ------------------- Kitab Library -------------------
+    let currentKitabFiles = [];
+    async function loadKitabs() {
+        const snap = await getDocs(collection(db, "kitabs"));
+        const listDiv = document.getElementById('kitabList');
+        listDiv.innerHTML = '';
+        let count = 0;
+        snap.forEach(docSnap => { count++;
+            const d = docSnap.data();
+            listDiv.innerHTML += `<div class="item-card"><div><strong>${escapeHtml(d.title)}</strong><br>${d.scheduleTime || ''}<br><small>${d.teacher || ''}</small></div>
+            <div><button onclick="editKitab('${docSnap.id}')">Edit</button> <button class="danger" onclick="deleteKitab('${docSnap.id}')">Delete</button></div></div>`;
+        });
+        document.getElementById('statKitabs').innerText = count;
+        window.editKitab = async (id) => {
+            const snap = await getDocs(collection(db, "kitabs"));
+            const d = snap.docs.find(doc => doc.id === id).data();
+            document.getElementById('kitabId').value = id;
+            document.getElementById('kitabName').value = d.title || '';
+            document.getElementById('kitabTeacher').value = d.teacher || '';
+            document.getElementById('kitabSchedule').value = d.scheduleTime || '';
+            document.getElementById('kitabDesc').value = d.description || '';
+            document.getElementById('kitabImage').value = d.imageUrl || '';
+            currentKitabFiles = d.files || [];
+            renderKitabFilesList();
+        };
+        window.deleteKitab = async (id) => { if(confirm("Delete kitab?")) { await deleteDoc(doc(db, "kitabs", id)); showToast("Deleted"); loadKitabs(); } };
+    }
+    function renderKitabFilesList() {
+        const container = document.getElementById('kitabFilesList');
+        if (!container) return;
+        container.innerHTML = currentKitabFiles.map(f => `<div class="file-row"><i class="fas ${f.type === 'pdf' ? 'fa-file-pdf' : 'fa-file-powerpoint'}"></i> ${escapeHtml(f.name)} <button type="button" class="danger" data-kfile="${f.name}" style="padding:0.2rem 0.8rem;">Remove</button></div>`).join('');
+        document.querySelectorAll('[data-kfile]').forEach(btn => btn.addEventListener('click', async (e) => {
+            const fileName = btn.dataset.kfile;
+            const id = document.getElementById('kitabId').value;
+            if (!id) return;
+            const fileObj = currentKitabFiles.find(f => f.name === fileName);
+            if (fileObj) {
+                const pathRef = ref(storage, `kitab_files/${id}/${fileName}`);
+                await deleteObject(pathRef).catch(()=>{});
+                currentKitabFiles = currentKitabFiles.filter(f => f.name !== fileName);
+                await updateDoc(doc(db, "kitabs", id), { files: currentKitabFiles });
+                renderKitabFilesList();
+                showToast("Removed");
+            }
+        }));
+    }
+    document.getElementById('uploadKitabFilesBtn').onclick = async () => {
+        const id = document.getElementById('kitabId').value;
+        if (!id) return showToast("Save kitab first", true);
+        const files = document.getElementById('kitabFilesInput').files;
+        if (!files.length) return;
+        const uploaded = [];
+        for (const file of files) {
+            const ext = file.name.split('.').pop().toLowerCase();
+            const type = ext === 'pdf' ? 'pdf' : (ext === 'ppt' || ext === 'pptx' ? 'ppt' : 'other');
+            const path = `kitab_files/${id}/${file.name}`;
+            const fileRef = ref(storage, path);
+            await uploadBytes(fileRef, file);
+            const url = await getDownloadURL(fileRef);
+            uploaded.push({ name: file.name, url, type });
+        }
+        const newFiles = [...currentKitabFiles, ...uploaded];
+        await updateDoc(doc(db, "kitabs", id), { files: newFiles });
+        currentKitabFiles = newFiles;
+        renderKitabFilesList();
+        showToast("Uploaded");
+    };
+    document.getElementById('kitabForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('kitabId').value;
+        const data = { title: document.getElementById('kitabName').value, teacher: document.getElementById('kitabTeacher').value, scheduleTime: document.getElementById('kitabSchedule').value, description: document.getElementById('kitabDesc').value, imageUrl: document.getElementById('kitabImage').value, updatedAt: new Date() };
+        if (id) { await updateDoc(doc(db, "kitabs", id), data); if (currentKitabFiles.length) await updateDoc(doc(db, "kitabs", id), { files: currentKitabFiles }); }
+        else { const newRef = await addDoc(collection(db, "kitabs"), { ...data, files: [], createdAt: new Date() }); document.getElementById('kitabId').value = newRef.id; showToast("Kitab created, now upload files"); }
+        loadKitabs();
+    });
+    document.getElementById('cancelKitab').onclick = () => { document.getElementById('kitabForm').reset(); document.getElementById('kitabId').value = ''; currentKitabFiles = []; renderKitabFilesList(); };
+
+    // ------------------- Legacy Qiraats -------------------
+    async function loadLegacy() {
+        const snap = await getDocs(collection(db, "legacyQiraats"));
+        const listDiv = document.getElementById('legacyList');
+        listDiv.innerHTML = '';
+        let count = 0;
+        snap.forEach(docSnap => { count++;
+            const d = docSnap.data();
+            listDiv.innerHTML += `<div class="item-card"><div><strong>${escapeHtml(d.name)}</strong><br>${d.teacher} | ${d.schedule} | ${d.venue}</div>
+            <div><button onclick="editLegacy('${docSnap.id}')">Edit</button> <button class="danger" onclick="deleteLegacy('${docSnap.id}')">Delete</button></div></div>`;
+        });
+        document.getElementById('statLegacy').innerText = count;
+        window.editLegacy = (id) => {
+            getDocs(collection(db, "legacyQiraats")).then(snap => {
+                const d = snap.docs.find(doc => doc.id === id).data();
+                document.getElementById('legacyId').value = id;
+                document.getElementById('legacyName').value = d.name;
+                document.getElementById('legacyTeacher').value = d.teacher;
+                document.getElementById('legacySchedule').value = d.schedule;
+                document.getElementById('legacyVenue').value = d.venue;
+            });
+        };
+        window.deleteLegacy = async (id) => { if(confirm("Delete?")) { await deleteDoc(doc(db, "legacyQiraats", id)); loadLegacy(); } };
+    }
+    document.getElementById('legacyForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const id = document.getElementById('legacyId').value;
+        const data = { name: document.getElementById('legacyName').value, teacher: document.getElementById('legacyTeacher').value, schedule: document.getElementById('legacySchedule').value, venue: document.getElementById('legacyVenue').value, updatedAt: new Date() };
+        if (id) await updateDoc(doc(db, "legacyQiraats", id), data);
+        else await addDoc(collection(db, "legacyQiraats"), { ...data, createdAt: new Date() });
+        showToast("Saved");
+        document.getElementById('legacyForm').reset(); document.getElementById('legacyId').value = '';
+        loadLegacy();
+    });
+    document.getElementById('cancelLegacy').onclick = () => { document.getElementById('legacyForm').reset(); document.getElementById('legacyId').value = ''; };
+
+    function escapeHtml(str) { if(!str) return ''; return String(str).replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m])); }
+
+    // initial load
+    loadAnnouncements();
+    loadQiraatCourses();
+    loadKitabs();
+    loadLegacy();
+</script>
+</body>
+</html>
